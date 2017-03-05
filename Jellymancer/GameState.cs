@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,11 @@ namespace Jellymancer
 {
     class GameState : State
     {
+        public GameState(ContentManager content)
+        {
+            this.content = content;            
+        }
+
         public override void Draw(GameTime gameTime)
         {
 

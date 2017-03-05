@@ -29,7 +29,8 @@ namespace Jellymancer
         Texture2D logo;
 
         List<String> items = new List<String>();
-        byte selectedItem;
+        public int selectedItem;
+        public bool chosen;
 
         /// <summary>
         /// Draw the game menu
@@ -47,6 +48,7 @@ namespace Jellymancer
                                        i == selectedItem ? Color.White : Color.Gray);
                 spriteBatch.Draw(logo, new Vector2(140, 100), Color.White);
             }
+            
             spriteBatch.End();
         }
 
@@ -59,11 +61,37 @@ namespace Jellymancer
             // Do key press stuff
             base.Update(gametime);
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (keyPress.Contains(Keys.Escape))
             {
                 toQuit = true;
             }
+
+            if (keyPress.Contains(Keys.Up))
+            {
+                menuUp();
+            }
+
+            if (keyPress.Contains(Keys.Down))
+            {
+                menuDown();
+            }
+
+            if (keyPress.Contains(Keys.Enter) || keyPress.Contains(Keys.Space))
+            {
+                chosen = true;
+            }
         }
 
+        private void menuDown()
+        {
+            selectedItem += 1;
+            selectedItem = Math.Min(items.Count - 1, selectedItem);
+        }
+
+        private void menuUp()
+        {
+            selectedItem -= 1;
+            selectedItem = Math.Max(selectedItem, 0);
+        }
     }
 }

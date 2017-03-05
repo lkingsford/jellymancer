@@ -15,6 +15,8 @@ namespace Jellymancer
 
         List<State> states = new List<State>();
 
+        MainMenu mainMenu;
+
         public Game()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -24,7 +26,8 @@ namespace Jellymancer
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 720;
 
-            states.Add(new MainMenu(Content));
+            mainMenu = new MainMenu(Content);
+            states.Add(mainMenu);
         }
 
         /// <summary>
@@ -87,6 +90,24 @@ namespace Jellymancer
                 Exit();
             }
 
+            // If in menu
+            if (states[states.Count - 1] == mainMenu)
+            {
+                if (mainMenu.chosen)
+                {
+                    switch (mainMenu.selectedItem)
+                    {
+                        case 0:
+                            StartGame();
+                            break;
+                        case 1:
+                            Exit();
+                            break;
+                    }
+                    mainMenu.chosen = false;
+                }
+            }
+
             base.Update(gameTime);
         }
 
@@ -100,6 +121,15 @@ namespace Jellymancer
             states[states.Count - 1].Draw(gameTime);
 
             base.Draw(gameTime);
+        }
+
+        /// <summary>
+        /// Start the game state
+        /// </summary>
+        private void StartGame()
+        {
+            var game = new GameState(Content);
+            states.Add(game);
         }
     }
 }

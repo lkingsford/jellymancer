@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,12 +44,38 @@ namespace Jellymancer
 
         }
 
+        KeyboardState oldState;
+
+        // Whether a new key push
+        protected List<Keys> keyPress;
+
         /// <summary>
         /// Update the logic of the game
         /// </summary>
         /// <param name="gametime"></param>
         public virtual void Update(GameTime gametime)
         {
+            // Set oldState the first time
+            if (oldState == null)
+            {
+                oldState = Keyboard.GetState();
+            }
+
+            // Get new keyboard state
+            var newState = Keyboard.GetState();
+
+            keyPress = new List<Keys>();
+
+            foreach(var i in newState.GetPressedKeys())
+            {
+                if (oldState.IsKeyUp(i))
+                {
+                    keyPress.Add(i);
+                }
+            }
+
+            oldState = newState;
+            
 
         }
 
