@@ -129,6 +129,9 @@ namespace Jellymancer
         private void StartGame()
         {
             var game = new GameState(Content);
+            game.LoadContent();
+            game.SpriteBatch = spriteBatch;
+            game.NewGame();
             states.Add(game);
         }
     }

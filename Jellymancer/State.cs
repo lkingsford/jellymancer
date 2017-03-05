@@ -35,13 +35,20 @@ namespace Jellymancer
             }
         }
 
+        Texture2D pointer;
+
         /// <summary>
         /// Draw the state to the screen
         /// </summary>
         /// <param name="gametime"></param>
         public virtual void Draw(GameTime gametime)
         {
-
+            spriteBatch.Begin();
+            if (pointer != null)
+            {
+                spriteBatch.Draw(pointer, new Vector2(Mouse.GetState().X, Mouse.GetState().Y), Color.White);
+            }
+            spriteBatch.End();
         }
 
         KeyboardState oldState;
@@ -75,8 +82,6 @@ namespace Jellymancer
             }
 
             oldState = newState;
-            
-
         }
 
         /// <summary>
@@ -84,7 +89,7 @@ namespace Jellymancer
         /// </summary>
         public virtual void LoadContent()
         {
-
+            pointer = content.Load<Texture2D>("Common/Pointer");
         }
 
         public bool toQuit = false;

@@ -23,6 +23,7 @@ namespace Jellymancer
         {
             font = content.Load<SpriteFont>("Menu/Body");
             logo = content.Load<Texture2D>("Menu/Logo");
+            base.LoadContent();
         }
 
         SpriteFont font;
@@ -44,12 +45,13 @@ namespace Jellymancer
             {
                 spriteBatch.DrawString(font,
                                        items[i],
-                                       new Vector2(100, 600 + i * 40),
+                                       new Vector2(100, 450 + i * 60),
                                        i == selectedItem ? Color.White : Color.Gray);
                 spriteBatch.Draw(logo, new Vector2(140, 100), Color.White);
             }
             
             spriteBatch.End();
+            base.Draw(gameTime);
         }
 
         /// <summary>
