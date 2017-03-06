@@ -20,7 +20,7 @@ namespace Jellymancer
         /// <summary>
         /// Area being played on
         /// </summary>
-        public MapTile[,] currentMap;
+        public MapChunk currentMap;
 
         /// <summary>
         /// The rest of the world
@@ -45,11 +45,11 @@ namespace Jellymancer
             int yOffset = 32;
 
             // Draw Tiles
-            for (var ix = 0; ix < currentMap.GetLength(0); ++ix)
+            for (var ix = 0; ix < currentMap.Width; ++ix)
             {
-                for (var iy = 0; iy < currentMap.GetLength(1); ++iy)
+                for (var iy = 0; iy < currentMap.Height; ++iy)
                 {
-                    spriteBatch.Draw(currentMap[ix, iy].img, new Vector2(ix * width + xOffset, iy * height + yOffset), Color.White);
+                    spriteBatch.Draw(currentMap.map[ix, iy].img, new Vector2(ix * width + xOffset, iy * height + yOffset), Color.White);
                 }
             }
 

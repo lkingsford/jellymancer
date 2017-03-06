@@ -23,17 +23,9 @@ namespace Jellymancer.GameParts
         /// <param name="chunkX"></param>
         /// <param name="chunkY"></param>
         /// <returns></returns>
-        public MapTile[,] GetChunk(int chunkX, int chunkY)
+        public MapChunk GetChunk(int chunkX, int chunkY)
         {
-            var map = new MapTile[20, 20];
-            for (var ix = 0; ix < 20; ++ix)
-            {
-                for (var iy = 0; iy < 20; ++iy)
-                {
-                    map[ix, iy] = new MapTile(content.Load<Texture2D>("Game/Tiles/Floor"), true);
-                }
-            }
-            return map;
+            return new MapChunk(20, 20, content);
         }
 
         /// <summary>
