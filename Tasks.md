@@ -8,7 +8,7 @@
 	- [x] Started game state
 	- [x] View tiled map (without scrolling)
 - [ ] **Moving at**
-	- [ ] Display basic characters
+	- [x] Display basic characters
 	- [ ] Basic empty stage with walls on outside
 	- [ ] Allow basic movement
 - [ ] **Jelly?** 

@@ -53,6 +53,12 @@ namespace Jellymancer
                 }
             }
 
+            // Draw actors
+            foreach (var i in currentMap.actors)
+            {
+                spriteBatch.Draw(i.sprite, new Vector2(i.x * width + xOffset, i.y * height + yOffset), Color.White);
+            }
+
             spriteBatch.End();
             base.Draw(gameTime);
         }

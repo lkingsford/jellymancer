@@ -15,9 +15,11 @@ namespace Jellymancer.GameParts
         /// <summary>
         /// Default constructor
         /// </summary>
-        public Actor()
+        public Actor(Texture2D sprite, int x, int y)
         {
-
+            this.sprite = sprite;
+            this.x = x;
+            this.y = y;
         }
 
         /// <summary>
@@ -28,6 +30,6 @@ namespace Jellymancer.GameParts
         /// <summary>
         /// Location, in respect to current map chunk
         /// </summary>
-        int x, y;
+        public int x = 0, y = 0;
     }
 }

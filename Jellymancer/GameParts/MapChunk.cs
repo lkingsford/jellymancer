@@ -34,12 +34,29 @@ namespace Jellymancer.GameParts
 
             Width = width;
             Height = height;
+
+            actors.Add(new GameParts.Actor(content.Load<Texture2D>("Game/Sprites/Adventurer1"), 10, 10));
+            actors.Add(new GameParts.Actor(content.Load<Texture2D>("Game/Sprites/Adventurer2"), 15, 10));
+            actors.Add(new GameParts.Actor(content.Load<Texture2D>("Game/Sprites/Adventurer3"), 5, 10));
+            actors.Add(new GameParts.Actor(content.Load<Texture2D>("Game/Sprites/Adventurer4"), 5, 5));
+            actors.Add(new GameParts.Actor(content.Load<Texture2D>("Game/Sprites/Adventurer5"), 15, 5));
         }
 
         public MapTile[,] map;
 
+        /// <summary>
+        /// Width of map
+        /// </summary>
         public readonly int Width;
+
+        /// <summary>
+        /// Height of map
+        /// </summary>
         public readonly int Height;
 
+        /// <summary>
+        /// Players/Monsters on the map
+        /// </summary>
+        public List<Actor> actors = new List<Actor>();
     }
 }
