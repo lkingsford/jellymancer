@@ -1,6 +1,8 @@
 ﻿using Jellymancer.GameParts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,13 +30,24 @@ namespace Jellymancer
         public GlobalMap globalMap;
 
         /// <summary>
+        /// The player. Seperate as to control and things.
+        /// </summary>
+        public PlayerCharacter pc;
+
+        /// <summary>
         /// Start a game
         /// </summary>
         public void NewGame()
         {
             currentMap = globalMap.GetChunk(0, 0);
+            pc = new PlayerCharacter(content.Load<Texture2D>("Game/Sprites/JellyCore"), 18, 18);
+            currentMap.AddActor(pc);
         }
 
+        /// <summary>
+        /// Draw game to the screen
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Draw(GameTime gameTime)
         {
             spriteBatch.Begin();
@@ -54,7 +67,7 @@ namespace Jellymancer
             }
 
             // Draw actors
-            foreach (var i in currentMap.actors)
+            foreach (var i in currentMap.Actors)
             {
                 spriteBatch.Draw(i.sprite, new Vector2(i.x * width + xOffset, i.y * height + yOffset), Color.White);
             }
@@ -63,9 +76,16 @@ namespace Jellymancer
             base.Draw(gameTime);
         }
 
+        /// <summary>
+        /// Do control and update game stuff. Basically - game logic goes here.
+        /// </summary>
+        /// <param name="gametime"></param>
         public override void Update(GameTime gametime)
         {
+            // Base needs to be called first to get pressed
             base.Update(gametime);
+
+
         }
     }
 }

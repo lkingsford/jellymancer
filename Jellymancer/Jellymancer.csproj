@@ -42,6 +42,7 @@
     <Compile Include="GameParts\Actor.cs" />
     <Compile Include="GameParts\GlobalMap.cs" />
     <Compile Include="GameParts\MapChunk.cs" />
+    <Compile Include="GameParts\PlayerCharacter.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="GameParts\MapTile.cs" />
     <Compile Include="MainMenu.cs" />

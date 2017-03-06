@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,11 +53,11 @@ namespace Jellymancer.GameParts
             Width = width;
             Height = height;
 
-            actors.Add(new GameParts.Actor(content.Load<Texture2D>("Game/Sprites/Adventurer1"), 10, 10));
-            actors.Add(new GameParts.Actor(content.Load<Texture2D>("Game/Sprites/Adventurer2"), 15, 10));
-            actors.Add(new GameParts.Actor(content.Load<Texture2D>("Game/Sprites/Adventurer3"), 5, 10));
-            actors.Add(new GameParts.Actor(content.Load<Texture2D>("Game/Sprites/Adventurer4"), 5, 5));
-            actors.Add(new GameParts.Actor(content.Load<Texture2D>("Game/Sprites/Adventurer5"), 15, 5));
+            AddActor(new GameParts.Actor(content.Load<Texture2D>("Game/Sprites/Adventurer1"), 10, 10));
+            AddActor(new GameParts.Actor(content.Load<Texture2D>("Game/Sprites/Adventurer2"), 15, 10));
+            AddActor(new GameParts.Actor(content.Load<Texture2D>("Game/Sprites/Adventurer3"), 5, 10));
+            AddActor(new GameParts.Actor(content.Load<Texture2D>("Game/Sprites/Adventurer4"), 5, 5));
+            AddActor(new GameParts.Actor(content.Load<Texture2D>("Game/Sprites/Adventurer5"), 15, 5));
         }
 
         public MapTile[,] map;
@@ -74,6 +75,27 @@ namespace Jellymancer.GameParts
         /// <summary>
         /// Players/Monsters on the map
         /// </summary>
-        public List<Actor> actors = new List<Actor>();
+        protected List<Actor> actors = new List<Actor>();
+
+        /// <summary>
+        /// Actors on the map that other objects can use
+        /// </summary>
+        public ReadOnlyCollection<Actor> Actors
+        {
+            get
+            {
+                return actors.AsReadOnly();
+            }
+        }
+
+        /// <summary>
+        /// Add actor to the list of actors, and change its 'MapChunk' to the current map
+        /// </summary>
+        /// <param name="actor"></param>
+        public void AddActor(Actor actor)
+        {
+            actors.Add(actor);
+            actor.currentMap = this;
+        }
     }
 }

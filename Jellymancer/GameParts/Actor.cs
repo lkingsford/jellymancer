@@ -31,5 +31,10 @@ namespace Jellymancer.GameParts
         /// Location, in respect to current map chunk
         /// </summary>
         public int x = 0, y = 0;
+
+        /// <summary>
+        /// Location which we're on
+        /// </summary>
+        public MapChunk currentMap = null;
     }
 }
