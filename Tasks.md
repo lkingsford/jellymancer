@@ -9,7 +9,7 @@
 	- [x] View tiled map (without scrolling)
 - [ ] **Moving at**
 	- [x] Display basic characters
-	- [ ] Basic empty stage with walls on outside
+	- [x] Basic empty stage with walls on outside
 	- [ ] Allow basic movement
 - [ ] **Jelly?** 
 	- [ ] Display multi-tile character (ex. Jelly)

@@ -22,14 +22,31 @@ namespace Jellymancer.GameParts
         public MapChunk(int width, int height, ContentManager content)
         {
             // I don't feel content should be in this....
-
             map = new MapTile[width, height];
+
+            // Archeotypes
+            var floor = new MapTile(content.Load<Texture2D>("Game/Tiles/Floor"), true); 
+            var wall = new MapTile(content.Load<Texture2D>("Game/Tiles/Wall"), true); 
+
+            // Fill Inside with Floor
+            for (var ix = 1; ix < width - 1; ++ix)
+            {
+                for (var iy = 1; iy < height - 1; ++iy)
+                {
+                    map[ix, iy] = floor;
+                }
+            }
+
+            // Fill Outside with Wall
             for (var ix = 0; ix < width; ++ix)
             {
-                for (var iy = 0; iy < height; ++iy)
-                {
-                    map[ix, iy] = new MapTile(content.Load<Texture2D>("Game/Tiles/Floor"), true);
-                }
+                map[ix, 0] = new MapTile(content.Load<Texture2D>("Game/Tiles/Wall"), true);
+                map[ix, height - 1] = new MapTile(content.Load<Texture2D>("Game/Tiles/Wall"), true);
+            }
+            for (var iy = 0; iy < height; ++iy)
+            {
+                map[0, iy] = new MapTile(content.Load<Texture2D>("Game/Tiles/Wall"), true);
+                map[width - 1, iy] = new MapTile(content.Load<Texture2D>("Game/Tiles/Wall"), true);
             }
 
             Width = width;
