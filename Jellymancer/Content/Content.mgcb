@@ -163,3 +163,9 @@
 /processorParam:TextureFormat=Color
 /build:Game/Sprites/Adventurer1.png
 
+#begin Game\Fonts\Debug.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Game\Fonts\Debug.spritefont
+

@@ -19,5 +19,17 @@ namespace Jellymancer.GameParts
         {
 
         }
+
+        /// <summary>
+        /// Move towards the given point
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public void MoveTowards(int x, int y)
+        {
+            int dx = Math.Sign(this.x - x) * -1;
+            int dy = Math.Sign(this.y - y) * -1;
+            Move(dx, dy);
+        }
     }
 }

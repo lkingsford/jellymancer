@@ -61,9 +61,9 @@ namespace Jellymancer
         protected bool[] mousePress = new bool[3];
 
         // Consts for accessing mousePress
-        const int LEFT_BUTTON = 0;
-        const int RIGHT_BUTTON = 1;
-        const int MIDDLE_BUTTON = 2;
+        protected const int LEFT_BUTTON = 0;
+        protected const int RIGHT_BUTTON = 1;
+        protected const int MIDDLE_BUTTON = 2;
 
         /// <summary>
         /// Update the logic of the game

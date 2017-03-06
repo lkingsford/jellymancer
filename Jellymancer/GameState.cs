@@ -44,6 +44,12 @@ namespace Jellymancer
             currentMap.AddActor(pc);
         }
 
+
+        const int WIDTH = 32;
+        const int HEIGHT = 32;
+        const int X_OFFSET = 320;
+        const int Y_OFFSET = 32;
+
         /// <summary>
         /// Draw game to the screen
         /// </summary>
@@ -52,25 +58,31 @@ namespace Jellymancer
         {
             spriteBatch.Begin();
 
-            int width = 32;
-            int height = 32;
-            int xOffset = 320;
-            int yOffset = 32;
 
             // Draw Tiles
             for (var ix = 0; ix < currentMap.Width; ++ix)
             {
                 for (var iy = 0; iy < currentMap.Height; ++iy)
                 {
-                    spriteBatch.Draw(currentMap.map[ix, iy].img, new Vector2(ix * width + xOffset, iy * height + yOffset), Color.White);
+                    spriteBatch.Draw(currentMap.map[ix, iy].img, new Vector2(ix * WIDTH + X_OFFSET, iy * HEIGHT + Y_OFFSET), Color.White);
                 }
             }
 
             // Draw actors
             foreach (var i in currentMap.Actors)
             {
-                spriteBatch.Draw(i.sprite, new Vector2(i.x * width + xOffset, i.y * height + yOffset), Color.White);
+                spriteBatch.Draw(i.sprite, new Vector2(i.x * WIDTH + X_OFFSET, i.y * HEIGHT + Y_OFFSET), Color.White);
             }
+
+            // Draw debug data - mouse position
+            var mouseState = Mouse.GetState();
+            var tileOverX = (mouseState.X - X_OFFSET) / WIDTH;
+            var tileOverY = (mouseState.Y - Y_OFFSET) / HEIGHT;
+            spriteBatch.DrawString(content.Load<SpriteFont>("Game/Fonts/Debug"),
+                                       string.Format("{0},{1}",tileOverX, tileOverY),
+                                       new Vector2(100, 100),
+                                       Color.Yellow
+                                       );
 
             spriteBatch.End();
             base.Draw(gameTime);
@@ -85,6 +97,14 @@ namespace Jellymancer
             // Base needs to be called first to get pressed
             base.Update(gametime);
 
+
+            if (mousePress[LEFT_BUTTON])
+            {
+                var mouseState = Mouse.GetState();
+                var tileOverX = (mouseState.X - X_OFFSET) / WIDTH;
+                var tileOverY = (mouseState.Y - Y_OFFSET) / HEIGHT;
+                pc.MoveTowards(tileOverX, tileOverY);
+            }
 
         }
     }

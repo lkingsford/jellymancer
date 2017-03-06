@@ -27,7 +27,7 @@ namespace Jellymancer.GameParts
 
             // Archeotypes
             var floor = new MapTile(content.Load<Texture2D>("Game/Tiles/Floor"), true); 
-            var wall = new MapTile(content.Load<Texture2D>("Game/Tiles/Wall"), true); 
+            var wall = new MapTile(content.Load<Texture2D>("Game/Tiles/Wall"), false); 
 
             // Fill Inside with Floor
             for (var ix = 1; ix < width - 1; ++ix)
@@ -41,13 +41,13 @@ namespace Jellymancer.GameParts
             // Fill Outside with Wall
             for (var ix = 0; ix < width; ++ix)
             {
-                map[ix, 0] = new MapTile(content.Load<Texture2D>("Game/Tiles/Wall"), true);
-                map[ix, height - 1] = new MapTile(content.Load<Texture2D>("Game/Tiles/Wall"), true);
+                map[ix, 0] = wall;
+                map[ix, height - 1] = wall;
             }
             for (var iy = 0; iy < height; ++iy)
             {
-                map[0, iy] = new MapTile(content.Load<Texture2D>("Game/Tiles/Wall"), true);
-                map[width - 1, iy] = new MapTile(content.Load<Texture2D>("Game/Tiles/Wall"), true);
+                map[0, iy] = wall;
+                map[width - 1, iy] = wall;
             }
 
             Width = width;
