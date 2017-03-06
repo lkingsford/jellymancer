@@ -51,10 +51,19 @@ namespace Jellymancer
             spriteBatch.End();
         }
 
-        KeyboardState oldState;
+        KeyboardState oldKeyState;
+        MouseState oldMouseState;
 
         // Whether a new key push
         protected List<Keys> keyPress;
+
+        // Whether a new mouse push
+        protected bool[] mousePress = new bool[3];
+
+        // Consts for accessing mousePress
+        const int LEFT_BUTTON = 0;
+        const int RIGHT_BUTTON = 1;
+        const int MIDDLE_BUTTON = 2;
 
         /// <summary>
         /// Update the logic of the game
@@ -62,26 +71,38 @@ namespace Jellymancer
         /// <param name="gametime"></param>
         public virtual void Update(GameTime gametime)
         {
-            // Set oldState the first time
-            if (oldState == null)
+            // Set old states the first time
+            if (oldKeyState == null)
             {
-                oldState = Keyboard.GetState();
+                oldKeyState = Keyboard.GetState();
+            }
+            
+            if (oldMouseState ==null)
+            {
+                oldMouseState = Mouse.GetState();
             }
 
             // Get new keyboard state
-            var newState = Keyboard.GetState();
-
+            var newKeyState = Keyboard.GetState();
             keyPress = new List<Keys>();
 
-            foreach(var i in newState.GetPressedKeys())
+            // Get keys that have been newly pressed
+            foreach(var i in newKeyState.GetPressedKeys())
             {
-                if (oldState.IsKeyUp(i))
+                if (oldKeyState.IsKeyUp(i))
                 {
                     keyPress.Add(i);
                 }
             }
 
-            oldState = newState;
+            // Get new mouse state
+            var newMouseState = Mouse.GetState();
+            mousePress[LEFT_BUTTON] = (oldMouseState.LeftButton == ButtonState.Released) && (newMouseState.LeftButton == ButtonState.Pressed);
+            mousePress[RIGHT_BUTTON] = (oldMouseState.RightButton == ButtonState.Released) && (newMouseState.RightButton == ButtonState.Pressed);
+            mousePress[MIDDLE_BUTTON] = (oldMouseState.MiddleButton == ButtonState.Released) && (newMouseState.MiddleButton == ButtonState.Pressed);
+
+            oldKeyState = newKeyState;
+            oldMouseState = newMouseState;
         }
 
         /// <summary>
