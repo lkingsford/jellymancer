@@ -94,7 +94,14 @@ namespace Jellymancer.GameParts
         /// <param name="actor"></param>
         public void AddActor(Actor actor)
         {
+            // Add actor
             actors.Add(actor);
+            // Add extra bits of actor
+            foreach (var i in actor.characterParts)
+            {
+                AddActor(i);
+            }
+            // Set the actor to this map
             actor.currentMap = this;
         }
     }

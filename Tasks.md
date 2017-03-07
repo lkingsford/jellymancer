@@ -12,7 +12,7 @@
 	- [x] Basic empty stage with walls on outside
 	- [x] Allow basic movement
 - [ ] **Jelly?** 
-	- [ ] Display multi-tile character (ex. Jelly)
+	- [ ] Display multi-tile player character (ex. Jelly)
 	- [ ] Allow more jelly-ish movement
 	- [ ] Detect choking
 - [ ] **Dungeon building 101**
@@ -20,6 +20,7 @@
 	- [ ] Basic dungeon generation
 	- [ ] Basic single tile enemy
 		- [ ] Pathfinding 😒
+- [ ] **Dungeon building 102**
 	- [ ] Basic jelly enemy
 	- [ ] Bigger jelly enemy as win condition
 	- [ ] Display text on winning

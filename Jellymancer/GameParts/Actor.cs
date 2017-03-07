@@ -42,7 +42,7 @@ namespace Jellymancer.GameParts
         /// </summary>
         /// <param name="dx">Relative X</param>
         /// <param name="dy">Relative Y</param>
-        protected virtual void Move(int dx, int dy)
+        public virtual void Move(int dx, int dy)
         {
             int desiredx = x + dx;
             int desiredy = y + dy;
@@ -59,5 +59,10 @@ namespace Jellymancer.GameParts
             x = desiredx;
             y = desiredy;
         }
+
+        /// <summary>
+        /// 'Slave' characters (parts that are associated with this, and generally controlled by it)
+        /// </summary>
+        public List<Actor> characterParts = new List<Actor>();
     }
 }
