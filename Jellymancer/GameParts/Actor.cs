@@ -64,5 +64,10 @@ namespace Jellymancer.GameParts
         /// 'Slave' characters (parts that are associated with this, and generally controlled by it)
         /// </summary>
         public List<Actor> characterParts = new List<Actor>();
+
+        /// <summary>
+        /// Parent - if part
+        /// </summary>
+        public Actor parent = null;
     }
 }

@@ -12,8 +12,8 @@
 	- [x] Basic empty stage with walls on outside
 	- [x] Allow basic movement
 - [ ] **Jelly?** 
-	- [ ] Display multi-tile player character (ex. Jelly)
-	- [ ] Allow more jelly-ish movement
+	- [x] Display multi-tile player character (ex. Jelly)
+	- [-] Allow more jelly-ish movement
 	- [ ] Detect choking
 - [ ] **Dungeon building 101**
 	- [ ] Scrolling map
