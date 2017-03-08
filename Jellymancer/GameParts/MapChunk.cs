@@ -89,6 +89,21 @@ namespace Jellymancer.GameParts
         }
 
         /// <summary>
+        /// Quick check if walkable
+        /// </summary>
+        /// <param name="v1"></param>
+        /// <param name="v2"></param>
+        /// <returns></returns>
+        public bool GetWalkable(int x, int y)
+        {
+            // If in bounds
+            if ((x < 0 || y < 0 || x >= Width || y >= Height)) { return false; }
+
+            // If walkable
+            return map[x, y].walkable;
+        }
+
+        /// <summary>
         /// Add actor to the list of actors, and change its 'MapChunk' to the current map
         /// </summary>
         /// <param name="actor"></param>

@@ -34,6 +34,8 @@ namespace Jellymancer
         /// </summary>
         public PlayerCharacter pc;
 
+        Random rng;
+
         /// <summary>
         /// Start a game
         /// </summary>
@@ -42,8 +44,11 @@ namespace Jellymancer
             currentMap = globalMap.GetChunk(0, 0);
             pc = new PlayerCharacter(content.Load<Texture2D>("Game/Sprites/JellyCore"),
                                      content.Load<Texture2D>("Game/Sprites/JellyBody"),
-                                     18, 18);
+                                     16, 16);
             currentMap.AddActor(pc);
+
+            rng = new Random();
+            pc.random = rng;
         }
 
 
@@ -93,6 +98,17 @@ namespace Jellymancer
                                        new Vector2(100, 130),
                                        Color.Yellow
                                        );
+
+            int y = 50; 
+            foreach (var i in pc.characterParts)
+            {
+                spriteBatch.DrawString(content.Load<SpriteFont>("Game/Fonts/Debug"),
+                                       $"{i.x} {i.y}",
+                                       new Vector2(10, y),
+                                       Color.Yellow
+                                       );
+                y += 30;
+            }
 
 
             spriteBatch.End();

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Jellymancer.GameParts
 {
-    class PlayerCharacter : Actor
+    class PlayerCharacter : JellyBit
     {
 
         /// <summary>
@@ -19,7 +19,6 @@ namespace Jellymancer.GameParts
         public PlayerCharacter (Texture2D sprite, Texture2D jellyPartSprite, int x, int y) : base (sprite, x, y)
         {
             this.jellyPartSprite = jellyPartSprite;
-
             for (var ix = x - 2; ix < x + 2; ++ix)
             {
                 for (var iy = x - 2; iy < y + 2; ++iy)
@@ -36,73 +35,144 @@ namespace Jellymancer.GameParts
         /// Sprite for additional bits of jelly
         /// </summary>
         public Texture2D jellyPartSprite;
+        internal Random random;
 
         /// <summary>
         /// Move towards the given point
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public void MoveTowards(int x, int y)
+        public override void MoveTowards(int x, int y)
         {
             // If x, y is inside the blob - then get closer to core
             // if x, y is outside the blob, move blob in dir 
 
-            if ((this.x == x && this.y == y) || (this.characterParts.Any(i => i.x == x && i.y == y)))
+            // In Core
+            int core_dx = Math.Sign(this.x - x) * -1;
+            int core_dy = Math.Sign(this.y - y) * -1;
+            Move(core_dx, core_dy);
+
+            double target_x = x;
+            double target_y = y;
+
+            // Apply movement force to all components 
+            foreach (var part in characterParts)
             {
-                // In Core
-                int dx = Math.Sign(this.x - x) * -1;
-                int dy = Math.Sign(this.y - y) * -1;
-                Move(dx, dy);
+                var p = (JellyBit)part;
 
-                // Move towards core
-                foreach (var i in characterParts)
+                // Initialise with current X and current Y if bigger than 1.5 out
+                if (Math.Abs(p.precise_x - p.x) > 1.5 || Math.Abs(p.precise_y = p.y) > 1.5)
                 {
-                    i.x = i.x - Math.Sign(i.x - this.x);
-                    i.y = i.y - Math.Sign(i.y - this.y);
+                    p.precise_x = p.x;
+                    p.precise_y = p.y;
                 }
 
-                // And sort them by how far away they are from target
-                var bitsByFarAway = characterParts.OrderBy(i => Math.Sqrt(Math.Pow((this.x - x), 2) + Math.Pow((this.y - y), 2)));
+                // Get angle
+                var theta = Math.PI + Math.Atan2(p.precise_x - target_x, p.precise_y - target_y);
+                var distance = Math.Min(1 , Math.Sqrt(Math.Pow(p.precise_x - target_x, 2) + Math.Pow(p.precise_y - target_y, 2)));
 
-                // Explode them (remove overlap)
-                foreach (var i in bitsByFarAway)
-                {
-                    // Find nearest walkable spot 
-                    var place = FindClear(i.x, i.y, i) ?? new Tuple<int, int>(this.x, this.y);
-                    // Move to it
-                    i.x = place.Item1;
-                    i.y = place.Item2;
-                }
+
+                p.precise_x += distance * Math.Sin(theta);
+                p.precise_y += distance * Math.Cos(theta);
+
+
             }
-            else
+
+            bool done = false;
+            int attempts = 0;
+            while (!done && attempts < 3)
             {
-                int dx = Math.Sign(this.x - x) * -1;
-                int dy = Math.Sign(this.y - y) * -1;
-                Move(dx, dy);
-
-                // Sort bits by how close they are to target
-                var bitsByDistance = characterParts.OrderByDescending(i => Math.Sqrt(Math.Pow((this.x - x), 2) + Math.Pow((this.y - y), 2)));
-
-                // Move them in that order
-                foreach (var i in bitsByDistance)
+                done = true;
+                
+                // While haven't finished moving...
+                var oldList = new List<Tuple<int, int>>();
+                foreach (var part in characterParts)
                 {
-                    var ic = (PlayerJellyBit)i;
-                    ic.MoveTowards(x, y);
+                    oldList.Add(new Tuple<int, int>(part.x, part.y));
                 }
 
-                // And sort them by how far away they are from target
-                var bitsByFarAway = characterParts.OrderBy(i => Math.Sqrt(Math.Pow((this.x - x), 2) + Math.Pow((this.y - y), 2)));
-
-                // Explode them (remove overlap)
-                foreach (var i in bitsByFarAway)
+                // Reduce overlap
+                foreach (var part in characterParts)
                 {
-                    // Find nearest walkable spot 
-                    var place = FindClear(i.x, i.y, i) ?? new Tuple<int, int>(this.x, this.y);
-                    // Move to it
-                    i.x = place.Item1;
-                    i.y = place.Item2;
+                    var p = (JellyBit)part;
+                    p.precise_x += random.NextDouble() / 10.0;
+                    p.precise_y += random.NextDouble() / 10.0;
                 }
+
+                // Get locations for attraction and repelling
+                var locations = new List<Tuple<double, double, JellyBit>>();
+                locations.Add(new Tuple<double, double, JellyBit>(this.x, this.y, this));
+
+                foreach (var part in characterParts)
+                {
+                    var p = (JellyBit)part;
+                    locations.Add(new Tuple<double, double, JellyBit>(p.precise_x, p.precise_y, p));
+                }
+
+                // Attract each other (use same locations)
+                foreach (var part in characterParts)
+                {
+                    var p = (JellyBit)part;
+                    foreach (var loc in locations)
+                    {
+                        if (loc.Item3 != part)
+                        {
+                            var distance = Math.Sqrt(Math.Pow((loc.Item1 - p.precise_x), 2) + Math.Pow((loc.Item2 - p.precise_y), 2));
+                            var attraction = Math.Min(0.3, (Math.Pow(1.5, 1.0 / distance)));
+                            var theta = Math.Atan2(loc.Item1 - p.precise_x, loc.Item2 - p.precise_y);
+                            p.precise_x += attraction * Math.Sin(theta);
+                            p.precise_y += attraction * Math.Cos(theta);
+                        }
+                    }
+                }
+
+                // Repel from each other and wall
+                foreach (var part in characterParts)
+                {
+                    var p = (JellyBit)part;
+                    // Hack to avoid wall
+                    if (!currentMap.GetWalkable(part.x, part.y)) { locations.Add(new Tuple<double, double, JellyBit>(part.x, part.y, null)); }
+                    if (!currentMap.GetWalkable(part.x + 1, part.y)) { locations.Add(new Tuple<double, double, JellyBit>(part.x + 1, part.y, null)); }
+                    if (!currentMap.GetWalkable(part.x - 1, part.y)) { locations.Add(new Tuple<double, double, JellyBit>(part.x - 1, part.y, null)); }
+                    if (!currentMap.GetWalkable(part.x, part.y + 1)) { locations.Add(new Tuple<double, double, JellyBit>(part.x, part.y + 1, null)); }
+                    if (!currentMap.GetWalkable(part.x, part.y - 1)) { locations.Add(new Tuple<double, double, JellyBit>(part.x, part.y - 1, null)); }
+                    foreach (var loc in locations)
+                    {
+                        if (loc.Item3 != part)
+                        {
+                            var distance = Math.Sqrt(Math.Pow((loc.Item1 - p.precise_x), 2) + Math.Pow((loc.Item2 - p.precise_y), 2));
+                            var theta = Math.Atan2(loc.Item1 - p.precise_x, loc.Item2 - p.precise_y);
+                            var deattraction = 1.2; //part == null ? 1.3 : 0.5;
+                            if (distance < 0.7)
+                            {
+                                p.precise_x -= deattraction * Math.Sin(theta);
+                                p.precise_y -= deattraction * Math.Cos(theta);
+                            }
+                        }
+                    }
+                }
+
+
+                // Finalise x, y
+                foreach (var part in characterParts)
+                {
+                    var p = (JellyBit)part;
+                    p.x = (int)Math.Round(p.precise_x);
+                    p.y = (int)Math.Round(p.precise_y);
+                }
+
+                // If any changed, not done
+                for (var i = 0; i < characterParts.Count; ++i)
+                {
+                    if (!(oldList[i].Item1 == characterParts[i].x && oldList[i].Item2 == characterParts[i].y ))
+                    {
+                        done = false;
+                        break;
+                    }
+                }
+                ++attempts;
             }
+
         }
 
         /// <summary>
@@ -202,7 +272,7 @@ namespace Jellymancer.GameParts
         /// <param name="y"></param>
         public void Grow(int x, int y)
         {
-            var jellyPart = new PlayerJellyBit(jellyPartSprite, x, y);
+            var jellyPart = new JellyBit(jellyPartSprite, x, y);
             characterParts.Add(jellyPart);
             currentMap?.AddActor(jellyPart);
         }

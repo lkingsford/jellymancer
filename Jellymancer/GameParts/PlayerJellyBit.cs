@@ -7,19 +7,23 @@ using System.Threading.Tasks;
 
 namespace Jellymancer.GameParts
 {
-    class PlayerJellyBit : Actor
+    class JellyBit : Actor
     {
-        public PlayerJellyBit(Texture2D sprite, int x, int y) : base(sprite, x, y)
+        public JellyBit(Texture2D sprite, int x, int y) : base(sprite, x, y)
         {
 
         }
+
+        // Precise x and y are used in force application in movement
+        public double precise_x;
+        public double precise_y;
 
         /// <summary>
         /// Move towards the given point
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public void MoveTowards(int x, int y)
+        public virtual void MoveTowards(int x, int y)
         {
             int dx = Math.Sign(this.x - x) * -1;
             int dy = Math.Sign(this.y - y) * -1;
