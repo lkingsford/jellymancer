@@ -34,6 +34,8 @@ namespace Jellymancer
         /// </summary>
         public PlayerCharacter pc;
 
+        public Random rng = new Random();
+
         /// <summary>
         /// Start a game
         /// </summary>
@@ -42,8 +44,9 @@ namespace Jellymancer
             currentMap = globalMap.GetChunk(0, 0);
             pc = new PlayerCharacter(content.Load<Texture2D>("Game/Sprites/JellyCore"),
                                      content.Load<Texture2D>("Game/Sprites/JellyBody"),
-                                     18, 18);
+                                     8, 8);
             currentMap.AddActor(pc);
+            pc.rng = rng;
         }
 
 

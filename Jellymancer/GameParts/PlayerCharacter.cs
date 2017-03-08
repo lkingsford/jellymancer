@@ -20,9 +20,9 @@ namespace Jellymancer.GameParts
         {
             this.jellyPartSprite = jellyPartSprite;
 
-            for (var ix = x - 2; ix < x + 2; ++ix)
+            for (var ix = x - 2; ix <= x + 2; ++ix)
             {
-                for (var iy = x - 2; iy < y + 2; ++iy)
+                for (var iy = x - 2; iy <= y + 2; ++iy)
                 {
                     if (!(ix == x && iy == y))
                     {
@@ -36,6 +36,7 @@ namespace Jellymancer.GameParts
         /// Sprite for additional bits of jelly
         /// </summary>
         public Texture2D jellyPartSprite;
+        internal Random rng;
 
         /// <summary>
         /// Move towards the given point
@@ -121,16 +122,16 @@ namespace Jellymancer.GameParts
             {
                 for (var ix = x - r; ix <= x + r; ++ix)
                 {
-                    for (var iy = y -r; iy <= y + r; ++iy)
+                    for (var iy = y - r; iy <= y + r; ++iy)
                     {
                         // If in bounds
-                        if ((ix < 0 || iy < 0 || ix >= currentMap.Width || iy >= currentMap.Height)) { break; }
+                        if ((ix < 0 || iy < 0 || ix >= currentMap.Width || iy >= currentMap.Height)) { continue; }
 
                         // Check if walkable
-                        if (!currentMap.map[ix, iy].walkable) { break; }
+                        if (!currentMap.map[ix, iy].walkable) { continue; }
 
                         // If both, check if monsters on it
-                        if (currentMap.Actors.Any(i => i != target && i.x == ix && i.y == iy)) { break; }
+                        if (currentMap.Actors.Any(i => i != target && i.x == ix && i.y == iy)) { continue; }
 
                         // Check if borders another part in a cardinal direction
                         bool borders = characterParts.Any(i => (i.x == ix + 1 && i.y == iy) ||
@@ -145,7 +146,7 @@ namespace Jellymancer.GameParts
                                               (ix == this.x && iy == this.y + 1));
 
                         // Has to border a bit
-                        if (!(borders || bordersParent)) { break; }
+                        if (!(borders || bordersParent)) { continue; }
                         
                         // Got a candidate
                         toExamine.Add(new Tuple<int, int>(ix, iy));
@@ -155,7 +156,11 @@ namespace Jellymancer.GameParts
                 if (toExamine.Count > 0)
                 {
                     // Got one 
-                    var bitsByFarAway = toExamine.OrderBy(i => Math.Sqrt(Math.Pow((i.Item1 - this.x), 2) + Math.Pow((i.Item2 - this.y), 2)));
+                    // Randomize order so not to always bias
+                    var randomizedOrder = toExamine.OrderBy(i=>rng.Next());
+                    // And get the lowers
+                    var bitsByFarAway = randomizedOrder.OrderBy(i => Math.Sqrt(Math.Pow((i.Item1 - this.x), 2) + Math.Pow((i.Item2 - this.y), 2)));
+                    foreach (var i in bitsByFarAway)
                     return bitsByFarAway.First();
                 }
                 else
