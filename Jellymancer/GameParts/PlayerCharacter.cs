@@ -44,33 +44,57 @@ namespace Jellymancer.GameParts
         /// <param name="y"></param>
         public void MoveTowards(int x, int y)
         {
-            // If x, y is inside the blob - then move internally
-            int dx = Math.Sign(this.x - x) * -1;
-            int dy = Math.Sign(this.y - y) * -1;
-            Move(dx, dy);
+            // If x, y is inside the blob - then get closer to core
+            // if x, y is outside the blob, move blob in dir 
 
-            // Move bits towards
-
-            // Sort bits by how close they are to target
-            var bitsByDistance = characterParts.OrderByDescending(i => Math.Sqrt(Math.Pow((this.x - x), 2) + Math.Pow((this.y - y), 2)));
-            
-            // Move them in that order
-            foreach (var i in bitsByDistance)
+            if ((this.x == x && this.y == y) || (this.characterParts.Any(i => i.x == x && i.y == y)))
             {
-                var ic = (PlayerJellyBit)i;
-                ic.MoveTowards(x, y);
+                // In Core
+                int dx = Math.Sign(this.x - x) * -1;
+                int dy = Math.Sign(this.y - y) * -1;
+                Move(dx, dy);
+
+                // Move towards core
+                foreach (var i in characterParts)
+                {
+                    i.x = i.x - Math.Sign(i.x - this.x);
+                    i.y = i.y - Math.Sign(i.y - this.y);
+                }
+
+                // And sort them by how far away they are from target
+                var bitsByFarAway = characterParts.OrderBy(i => Math.Sqrt(Math.Pow((this.x - x), 2) + Math.Pow((this.y - y), 2)));
+
+                // Explode them (remove overlap)
+                foreach (var i in bitsByFarAway)
+                {
+                    // Find nearest walkable spot 
+                    var place = FindClear(i.x, i.y, i) ?? new Tuple<int, int>(this.x, this.y);
+                    // Move to it
+                    i.x = place.Item1;
+                    i.y = place.Item2;
+                }
             }
-
-            // And sort them by how far away they are from target
-            var bitsByFarAway = characterParts.OrderBy(i => Math.Sqrt(Math.Pow((this.x - x), 2) + Math.Pow((this.y - y), 2)));
-
-            // Explode them (remove overlap)
-            foreach (var i in bitsByFarAway)
+            else
             {
-                // Check if overlap
-                //var overlap = bitsByFarAway.Where(j => i.x == j.x && i.y == j.y);
-                // There should be 1... (this one)... otherwise expand
-                //if (overlap.Count() > 1)
+                int dx = Math.Sign(this.x - x) * -1;
+                int dy = Math.Sign(this.y - y) * -1;
+                Move(dx, dy);
+
+                // Sort bits by how close they are to target
+                var bitsByDistance = characterParts.OrderByDescending(i => Math.Sqrt(Math.Pow((this.x - x), 2) + Math.Pow((this.y - y), 2)));
+
+                // Move them in that order
+                foreach (var i in bitsByDistance)
+                {
+                    var ic = (PlayerJellyBit)i;
+                    ic.MoveTowards(x, y);
+                }
+
+                // And sort them by how far away they are from target
+                var bitsByFarAway = characterParts.OrderBy(i => Math.Sqrt(Math.Pow((this.x - x), 2) + Math.Pow((this.y - y), 2)));
+
+                // Explode them (remove overlap)
+                foreach (var i in bitsByFarAway)
                 {
                     // Find nearest walkable spot 
                     var place = FindClear(i.x, i.y, i) ?? new Tuple<int, int>(this.x, this.y);

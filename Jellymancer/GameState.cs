@@ -76,7 +76,7 @@ namespace Jellymancer
                 spriteBatch.Draw(i.sprite, new Vector2(i.x * WIDTH + X_OFFSET, i.y * HEIGHT + Y_OFFSET), Color.White);
             }
 
-            // Draw debug data - mouse position
+            // Draw debug data - mouse position 
             var mouseState = Mouse.GetState();
             var tileOverX = (mouseState.X - X_OFFSET) / WIDTH;
             var tileOverY = (mouseState.Y - Y_OFFSET) / HEIGHT;
@@ -85,6 +85,15 @@ namespace Jellymancer
                                        new Vector2(100, 100),
                                        Color.Yellow
                                        );
+
+            // Draw debug data - mouse position distance from dude
+            var dist = Math.Sqrt(Math.Pow((tileOverX - pc.x), 2) + Math.Pow((tileOverY - pc.y), 2));
+            spriteBatch.DrawString(content.Load<SpriteFont>("Game/Fonts/Debug"),
+                                       dist.ToString(),
+                                       new Vector2(100, 130),
+                                       Color.Yellow
+                                       );
+
 
             spriteBatch.End();
             base.Draw(gameTime);
