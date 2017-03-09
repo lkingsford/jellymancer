@@ -32,7 +32,7 @@ namespace Jellymancer.GameParts
         /// <param name="dx"></param>
         /// <param name="dy"></param>
         /// <returns></returns>
-        private bool TryMove(int dx, int dy)
+        public virtual bool TryMove(int dx, int dy)
         {
             int desiredx = x + dx;
             int desiredy = y + dy;

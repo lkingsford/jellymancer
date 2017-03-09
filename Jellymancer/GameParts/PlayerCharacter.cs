@@ -43,7 +43,7 @@ namespace Jellymancer.GameParts
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public void MoveTowards(int x, int y)
+        public new bool MoveTowards(int x, int y)
         {
             // If x, y is inside the blob - then get closer to core
             // if x, y is outside the blob, move blob in dir 
@@ -77,6 +77,8 @@ namespace Jellymancer.GameParts
 
             // And pull them back to touch the core
 
+
+            visitNo = 0;
             bool notStuckProperly;
             do
             {
@@ -91,8 +93,12 @@ namespace Jellymancer.GameParts
                     MoveTowards(this.x, this.y);
                 }
             }
-            while (notStuckProperly);//notStuckProperly);
+            while (notStuckProperly && visitNo < 100);
+
+            return true;
         }
+
+        int visitNo = 0;
 
         /// <summary>
         /// Breadth first mess
@@ -102,6 +108,8 @@ namespace Jellymancer.GameParts
         /// <returns></returns>
         private void visit(Actor a, List<Tuple<bool, JellyBit>> visitList)
         {
+            visitNo += 1;
+
             var me = visitList.First(i => i.Item2 == a);
             if (me.Item1 && a != this) { return; }
             visitList.Remove(me);

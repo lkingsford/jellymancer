@@ -19,7 +19,9 @@ namespace Jellymancer.GameParts
         {
             this.sprite = sprite;
             this.x = x;
+            lastTurnX = x;
             this.y = y;
+            lastTurnY = y;
         }
 
         /// <summary>
@@ -31,6 +33,7 @@ namespace Jellymancer.GameParts
         /// Location, in respect to current map chunk
         /// </summary>
         public int x = 0, y = 0;
+        public int lastTurnX = 0, lastTurnY = 0;
 
         /// <summary>
         /// Location which we're on
