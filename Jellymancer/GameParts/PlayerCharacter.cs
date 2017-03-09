@@ -87,7 +87,6 @@ namespace Jellymancer.GameParts
                 visit(this, markedVisitBitsList);
                 markedVisitBitsList.RemoveAll(i => i.Item2 == this);
                 notStuckProperly = markedVisitBitsList.Any(i => !i.Item1);
-                System.Diagnostics.Debug.WriteLine(notStuckProperly);
                 if (notStuckProperly)
                 {
                     MoveTowards(this.x, this.y);

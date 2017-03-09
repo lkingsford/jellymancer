@@ -55,6 +55,9 @@ namespace Jellymancer
         const int X_OFFSET = 320;
         const int Y_OFFSET = 32;
 
+        double timeSince = 0.0f;
+        const double ANIMATION_TIME = 0.5f;
+
         /// <summary>
         /// Draw game to the screen
         /// </summary>
@@ -73,10 +76,15 @@ namespace Jellymancer
                 }
             }
 
+            timeSince += gameTime.ElapsedGameTime.TotalSeconds;
+
             // Draw actors
             foreach (var i in currentMap.Actors)
             {
-                spriteBatch.Draw(i.sprite, new Vector2(i.x * WIDTH + X_OFFSET, i.y * HEIGHT + Y_OFFSET), Color.White);
+                var timeRatio = Math.Min(1, timeSince / ANIMATION_TIME);
+                double x = i.x * timeRatio + i.lastTurnX * (1.0 - timeRatio);
+                double y = i.y * timeRatio + i.lastTurnY * (1.0 - timeRatio);
+                spriteBatch.Draw(i.sprite, new Vector2((int)(x * WIDTH + X_OFFSET), (int)(y * HEIGHT + Y_OFFSET)), Color.White);
             }
 
             // Draw debug data - mouse position 
@@ -114,10 +122,17 @@ namespace Jellymancer
 
             if (mousePress[LEFT_BUTTON])
             {
+                foreach(var i in currentMap.Actors)
+                {
+                    i.lastTurnX = i.x;
+                    i.lastTurnY = i.y;
+                }
+
                 var mouseState = Mouse.GetState();
                 var tileOverX = (mouseState.X - X_OFFSET) / WIDTH;
                 var tileOverY = (mouseState.Y - Y_OFFSET) / HEIGHT;
                 pc.MoveTowards(tileOverX, tileOverY);
+                timeSince = 0;
             }
 
         }
