@@ -76,8 +76,6 @@ namespace Jellymancer.GameParts
             }
 
             // And pull them back to touch the core
-
-
             visitNo = 0;
             bool notStuckProperly;
             do
@@ -93,6 +91,20 @@ namespace Jellymancer.GameParts
                 }
             }
             while (notStuckProperly && visitNo < 100);
+
+            // And this bit's for the sake of the animation
+            // If it's the same as another last turn, don't move
+            // ... Wish I knew why this wasn't working
+            foreach (var i in characterParts)
+            {
+                var v = characterParts.Where(j => (j.lastTurnX == i.x) && (j.lastTurnY == i.y));
+
+                if (characterParts.Any(j => (j.lastTurnX == i.x) && (j.lastTurnY == i.y)))
+                {
+                    i.lastTurnX = i.x;
+                    i.lastTurnY = i.y;
+                }
+            }
 
             return true;
         }

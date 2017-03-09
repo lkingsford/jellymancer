@@ -56,7 +56,7 @@ namespace Jellymancer
         const int Y_OFFSET = 32;
 
         double timeSince = 0.0f;
-        const double ANIMATION_TIME = 0.5f;
+        const double ANIMATION_TIME = 0.3f;
 
         /// <summary>
         /// Draw game to the screen
