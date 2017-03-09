@@ -22,6 +22,8 @@ namespace Jellymancer.GameParts
             lastTurnX = x;
             this.y = y;
             lastTurnY = y;
+            // How much bigger a jelly gets after eating it
+            jellySizeIncrease = 4;
         }
 
         /// <summary>
@@ -34,6 +36,8 @@ namespace Jellymancer.GameParts
         /// </summary>
         public int x = 0, y = 0;
         public int lastTurnX = 0, lastTurnY = 0;
+
+        public int jellySizeIncrease;
 
         /// <summary>
         /// Whether this one is a killa by chokin'
@@ -86,6 +90,14 @@ namespace Jellymancer.GameParts
         public virtual void Choke()
         {
             dead = true;
+        }
+
+        /// <summary>
+        /// Has killed, not was killed
+        /// </summary>
+        /// <param name="i"></param>
+        public virtual void Killed(Actor i)
+        {
         }
     }
 }

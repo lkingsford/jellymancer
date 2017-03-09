@@ -122,16 +122,8 @@ namespace Jellymancer
         {
             if (x < 0 || y < 0 || x >= currentMap.Width || y >= currentMap.Height) { return null; }
 
-            Actor a;
-            try
-            {
-                a = currentMap.Actors.First(i => (i.x == x) && (i.y == y));
-            }
-            catch (InvalidOperationException)
-            {
-                return null;
-            }
-            return a;
+            var a = currentMap.Actors.Where(i => (i.x == x) && (i.y == y));
+            return a.Count() > 0 ? a.First() : null;
         }
 
         /// <summary>
@@ -158,9 +150,12 @@ namespace Jellymancer
                 timeSince = 0;
 
                 // Do choking
-                foreach(var i in currentMap.Actors)
+                //   To prevent changing in foreach
+                var actorsBeforeChoke = new List<Actor>(currentMap.Actors);
+                foreach(var i in actorsBeforeChoke)
                 {
                     int neighboursOccupied = 0;
+                    var chokedBy = new Dictionary<Actor, int>();
 
                     // Check if neighbours are choking or by wall
                     for (var ix = i.x - 1; ix <= i.x + 1; ++ix)
@@ -182,14 +177,21 @@ namespace Jellymancer
                                         (i != a))
                                     {
                                         // It was easier to deal with this logical bit seperately
-                                        if (i.parent != null)
+                                        
+                                        if (((i.parent != null || a.parent != null) && (i.parent != a.parent)) ||
+                                            ((i.parent == null && a.parent == null)))
                                         {
                                             neighboursOccupied += 1;
+                                            if (chokedBy.ContainsKey(a))
+                                            {
+                                                ++chokedBy[a];
+                                            }
+                                            else
+                                            {
+                                                chokedBy[a] = 1;
+                                            }
                                         }
-                                        else if (i.parent == a.parent)
-                                        {
-                                            neighboursOccupied += 1;
-                                        }
+                                        
                                     }
                                 }
                             }
@@ -199,6 +201,8 @@ namespace Jellymancer
                     if (neighboursOccupied >= 8)
                     {
                         i.Choke();
+                        var chokedByDude = chokedBy.OrderByDescending(j => j.Value);
+                        chokedByDude.First().Key.Killed(i);
                     }
                 }
 

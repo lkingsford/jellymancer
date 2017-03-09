@@ -11,10 +11,11 @@
 	- [x] Display basic characters
 	- [x] Basic empty stage with walls on outside
 	- [x] Allow basic movement
-- [ ] **Jelly?** 
+- [x] **Jelly?** 
 	- [x] Display multi-tile player character (ex. Jelly)
 	- [x] Allow more jelly-ish movement
-	- [ ] Detect choking
+	- [x] Detect choking
+	- [x] Grow on eating dudes
 - [ ] **Dungeon building 101**
 	- [ ] Scrolling map
 	- [ ] Basic dungeon generation

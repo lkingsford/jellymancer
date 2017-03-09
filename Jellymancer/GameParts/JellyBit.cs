@@ -26,6 +26,7 @@ namespace Jellymancer.GameParts
             Move(dx, dy);
 
             choking = true;
+            jellySizeIncrease = 1;
         }
 
         /// <summary>
@@ -64,6 +65,12 @@ namespace Jellymancer.GameParts
             
             if (TryMove(dx, 0)) { return; }
             if (TryMove(0, dy)) { return; }
+        }
+
+
+        public override void Killed(Actor i)
+        {
+            parent?.Killed(i);
         }
     }
 }

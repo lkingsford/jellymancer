@@ -64,7 +64,18 @@ namespace Jellymancer.GameParts
                 ic.MoveTowards(x, y);
             }
 
-            // And sort them by how far away they are from target
+            ExplodeAndPullIn();
+
+            return true;
+        }
+
+        /// <summary>
+        /// Explodes them out, and pulls them back until they touch the core
+        /// </summary>
+        private void ExplodeAndPullIn()
+        {
+
+            // Sort them by how far away they are from target
             var bitsByFarAway = characterParts.OrderBy(i => Math.Sqrt(Math.Pow((this.x - x), 2) + Math.Pow((this.y - y), 2)));
 
             // Explode them (remove overlap)
@@ -108,7 +119,6 @@ namespace Jellymancer.GameParts
                 }
             }
 
-            return true;
         }
 
         int visitNo = 0;
@@ -241,8 +251,22 @@ namespace Jellymancer.GameParts
         public void Grow(int x, int y)
         {
             var jellyPart = new JellyBit(jellyPartSprite, x, y);
+            jellyPart.parent = this;
             characterParts.Add(jellyPart);
             currentMap?.AddActor(jellyPart);
+        }
+
+        /// <summary>
+        /// Killed - so grow a bit
+        /// </summary>
+        /// <param name="actor"></param>
+        public override void Killed(Actor actor)
+        {
+            for (var i = 0; i <= actor.jellySizeIncrease; ++i)
+            {
+                Grow(actor.x, actor.y);
+                ExplodeAndPullIn();
+            }
         }
     }
 }
