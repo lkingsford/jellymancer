@@ -30,6 +30,8 @@ namespace Jellymancer.GameParts
                     }
                 }
             }
+
+            choking = true;
         }
 
         /// <summary>

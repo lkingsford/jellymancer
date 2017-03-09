@@ -24,6 +24,8 @@ namespace Jellymancer.GameParts
             int dx = Math.Sign(this.x - x) * -1;
             int dy = Math.Sign(this.y - y) * -1;
             Move(dx, dy);
+
+            choking = true;
         }
 
         /// <summary>

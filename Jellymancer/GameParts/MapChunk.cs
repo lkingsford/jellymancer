@@ -104,5 +104,13 @@ namespace Jellymancer.GameParts
             // Set the actor to this map
             actor.currentMap = this;
         }
+
+        /// <summary>
+        /// Kill all actors marked dead
+        /// </summary>
+        public void KillDeadActors()
+        {
+            actors.RemoveAll(i => i.dead);
+        }
     }
 }

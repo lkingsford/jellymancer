@@ -28,12 +28,17 @@ namespace Jellymancer.GameParts
         /// Sprite that looks like
         /// </summary>
         public Texture2D sprite;
-
+        
         /// <summary>
         /// Location, in respect to current map chunk
         /// </summary>
         public int x = 0, y = 0;
         public int lastTurnX = 0, lastTurnY = 0;
+
+        /// <summary>
+        /// Whether this one is a killa by chokin'
+        /// </summary>
+        public bool choking = false;
 
         /// <summary>
         /// Location which we're on
@@ -72,5 +77,15 @@ namespace Jellymancer.GameParts
         /// Parent - if part
         /// </summary>
         public Actor parent = null;
+
+        public  bool dead = false;
+
+        /// <summary>
+        /// May need to do things
+        /// </summary>
+        public virtual void Choke()
+        {
+            dead = true;
+        }
     }
 }

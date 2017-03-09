@@ -110,6 +110,30 @@ namespace Jellymancer
             base.Draw(gameTime);
         }
 
+        // Check if map walkable
+        private bool Walkable(int x, int y)
+        {
+            if (x < 0 || y < 0 || x >= currentMap.Width || y >= currentMap.Height) { return false; }
+            return currentMap.map[x, y].walkable;
+        }
+
+        // Check if monster on tile
+        private Actor MonsterOnTile(int x, int y)
+        {
+            if (x < 0 || y < 0 || x >= currentMap.Width || y >= currentMap.Height) { return null; }
+
+            Actor a;
+            try
+            {
+                a = currentMap.Actors.First(i => (i.x == x) && (i.y == y));
+            }
+            catch (InvalidOperationException)
+            {
+                return null;
+            }
+            return a;
+        }
+
         /// <summary>
         /// Do control and update game stuff. Basically - game logic goes here.
         /// </summary>
@@ -118,7 +142,6 @@ namespace Jellymancer
         {
             // Base needs to be called first to get pressed
             base.Update(gametime);
-
 
             if (mousePress[LEFT_BUTTON])
             {
@@ -133,6 +156,46 @@ namespace Jellymancer
                 var tileOverY = (mouseState.Y - Y_OFFSET) / HEIGHT;
                 pc.MoveTowards(tileOverX, tileOverY);
                 timeSince = 0;
+
+                // Do choking
+                foreach(var i in currentMap.Actors)
+                {
+                    int neighboursOccupied = 0;
+
+                    // Check if neighbours are choking or by wall
+                    for (var ix = i.x - 1; ix <= i.x + 1; ++ix)
+                    {
+                        for (var iy = i.y - 1; iy <= i.y + 1; ++iy)
+                        {
+                            if (!Walkable(ix, iy))
+                            {
+                                neighboursOccupied += 1;
+                            }
+                            else
+                            {
+                                var a = MonsterOnTile(ix, iy);
+                                if (a != null)
+                                {
+                                    if ((a.choking == true) &&
+                                        (!i.characterParts.Contains(a)) &&
+                                        (!a.parent?.characterParts.Contains(a) ?? true) &&
+                                        (i != a))
+                                    {
+                                        neighboursOccupied += 1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (neighboursOccupied >= 8)
+                    {
+                        i.Choke();
+                    }
+                }
+
+                // Kill deads
+                currentMap.KillDeadActors();
             }
 
         }
