@@ -178,10 +178,18 @@ namespace Jellymancer
                                 {
                                     if ((a.choking == true) &&
                                         (!i.characterParts.Contains(a)) &&
-                                        (!a.parent?.characterParts.Contains(a) ?? true) &&
+                                        (!a.characterParts.Contains(i)) &&
                                         (i != a))
                                     {
-                                        neighboursOccupied += 1;
+                                        // It was easier to deal with this logical bit seperately
+                                        if (i.parent != null)
+                                        {
+                                            neighboursOccupied += 1;
+                                        }
+                                        else if (i.parent == a.parent)
+                                        {
+                                            neighboursOccupied += 1;
+                                        }
                                     }
                                 }
                             }
