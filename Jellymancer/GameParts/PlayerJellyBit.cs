@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Jellymancer.GameParts
 {
-    class PlayerJellyBit : Actor
+    class JellyBit : Actor
     {
-        public PlayerJellyBit(Texture2D sprite, int x, int y) : base(sprite, x, y)
+        public JellyBit(Texture2D sprite, int x, int y) : base(sprite, x, y)
         {
 
         }

@@ -13,7 +13,7 @@
 	- [x] Allow basic movement
 - [ ] **Jelly?** 
 	- [x] Display multi-tile player character (ex. Jelly)
-	- [-] Allow more jelly-ish movement
+	- [x] Allow more jelly-ish movement
 	- [ ] Detect choking
 - [ ] **Dungeon building 101**
 	- [ ] Scrolling map

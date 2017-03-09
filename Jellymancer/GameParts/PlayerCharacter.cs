@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Jellymancer.GameParts
 {
-    class PlayerCharacter : Actor
+    class PlayerCharacter : JellyBit
     {
 
         /// <summary>
@@ -48,61 +48,73 @@ namespace Jellymancer.GameParts
             // If x, y is inside the blob - then get closer to core
             // if x, y is outside the blob, move blob in dir 
 
-            if ((this.x == x && this.y == y) || (this.characterParts.Any(i => i.x == x && i.y == y)))
+            int dx = Math.Sign(this.x - x) * -1;
+            int dy = Math.Sign(this.y - y) * -1;
+            Move(dx, dy);
+
+            // Sort bits by how close they are to target
+            var bitsByDistance = characterParts.OrderByDescending(i => Math.Sqrt(Math.Pow((this.x - x), 2) + Math.Pow((this.y - y), 2)));
+
+            // Move them in that order
+            foreach (var i in bitsByDistance)
             {
-                // In Core
-                int dx = Math.Sign(this.x - x) * -1;
-                int dy = Math.Sign(this.y - y) * -1;
-                Move(dx, dy);
+                var ic = (JellyBit)i;
+                ic.MoveTowards(x, y);
+            }
 
-                // Move towards core
-                foreach (var i in characterParts)
+            // And sort them by how far away they are from target
+            var bitsByFarAway = characterParts.OrderBy(i => Math.Sqrt(Math.Pow((this.x - x), 2) + Math.Pow((this.y - y), 2)));
+
+            // Explode them (remove overlap)
+            foreach (var i in bitsByFarAway)
+            {
+                // Find nearest walkable spot 
+                var place = FindClear(i.x, i.y, i) ?? new Tuple<int, int>(this.x, this.y);
+                // Move to it
+                i.x = place.Item1;
+                i.y = place.Item2;
+            }
+
+            // And pull them back to touch the core
+
+            bool notStuckProperly;
+            do
+            {
+                var markedVisitBitsList = characterParts.Select(i => new Tuple<bool, JellyBit>(false, (JellyBit)i)).ToList();
+                markedVisitBitsList.Add(new Tuple<bool, JellyBit>(true, this));
+                visit(this, markedVisitBitsList);
+                markedVisitBitsList.RemoveAll(i => i.Item2 == this);
+                notStuckProperly = markedVisitBitsList.Any(i => !i.Item1);
+                System.Diagnostics.Debug.WriteLine(notStuckProperly);
+                if (notStuckProperly)
                 {
-                    i.x = i.x - Math.Sign(i.x - this.x);
-                    i.y = i.y - Math.Sign(i.y - this.y);
-                }
-
-                // And sort them by how far away they are from target
-                var bitsByFarAway = characterParts.OrderBy(i => Math.Sqrt(Math.Pow((this.x - x), 2) + Math.Pow((this.y - y), 2)));
-
-                // Explode them (remove overlap)
-                foreach (var i in bitsByFarAway)
-                {
-                    // Find nearest walkable spot 
-                    var place = FindClear(i.x, i.y, i) ?? new Tuple<int, int>(this.x, this.y);
-                    // Move to it
-                    i.x = place.Item1;
-                    i.y = place.Item2;
+                    MoveTowards(this.x, this.y);
                 }
             }
-            else
+            while (notStuckProperly);//notStuckProperly);
+        }
+
+        /// <summary>
+        /// Breadth first mess
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="visitList"></param>
+        /// <returns></returns>
+        private void visit(Actor a, List<Tuple<bool, JellyBit>> visitList)
+        {
+            var me = visitList.First(i => i.Item2 == a);
+            if (me.Item1 && a != this) { return; }
+            visitList.Remove(me);
+            visitList.Add(new Tuple<bool, JellyBit>(true, me.Item2));
+
+            var neighbours = visitList.Where(i => ((i.Item2.x + 1 == a.x) && (i.Item2.y == a.y)) ||
+                                                 ((i.Item2.x - 1 == a.x) && (i.Item2.y == a.y)) ||
+                                                 ((i.Item2.y + 1 == a.y) && (i.Item2.x == a.x)) ||
+                                                 ((i.Item2.y - 1 == a.y) && (i.Item2.x == a.x))).ToList();
+
+            for (int i = 0; i < neighbours.Count(); ++i)
             {
-                int dx = Math.Sign(this.x - x) * -1;
-                int dy = Math.Sign(this.y - y) * -1;
-                Move(dx, dy);
-
-                // Sort bits by how close they are to target
-                var bitsByDistance = characterParts.OrderByDescending(i => Math.Sqrt(Math.Pow((this.x - x), 2) + Math.Pow((this.y - y), 2)));
-
-                // Move them in that order
-                foreach (var i in bitsByDistance)
-                {
-                    var ic = (PlayerJellyBit)i;
-                    ic.MoveTowards(x, y);
-                }
-
-                // And sort them by how far away they are from target
-                var bitsByFarAway = characterParts.OrderBy(i => Math.Sqrt(Math.Pow((this.x - x), 2) + Math.Pow((this.y - y), 2)));
-
-                // Explode them (remove overlap)
-                foreach (var i in bitsByFarAway)
-                {
-                    // Find nearest walkable spot 
-                    var place = FindClear(i.x, i.y, i) ?? new Tuple<int, int>(this.x, this.y);
-                    // Move to it
-                    i.x = place.Item1;
-                    i.y = place.Item2;
-                }
+                visit(neighbours[i].Item2, visitList);
             }
         }
 
@@ -159,7 +171,7 @@ namespace Jellymancer.GameParts
                     // Randomize order so not to always bias
                     var randomizedOrder = toExamine.OrderBy(i=>rng.Next());
                     // And get the lowers
-                    var bitsByFarAway = randomizedOrder.OrderBy(i => Math.Sqrt(Math.Pow((i.Item1 - this.x), 2) + Math.Pow((i.Item2 - this.y), 2)));
+                    var bitsByFarAway = randomizedOrder.OrderBy(i => Math.Sqrt(Math.Pow((i.Item1 - x), 2) + Math.Pow((i.Item2 - y), 2)));
                     foreach (var i in bitsByFarAway)
                     return bitsByFarAway.First();
                 }
@@ -207,7 +219,7 @@ namespace Jellymancer.GameParts
         /// <param name="y"></param>
         public void Grow(int x, int y)
         {
-            var jellyPart = new PlayerJellyBit(jellyPartSprite, x, y);
+            var jellyPart = new JellyBit(jellyPartSprite, x, y);
             characterParts.Add(jellyPart);
             currentMap?.AddActor(jellyPart);
         }
