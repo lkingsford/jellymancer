@@ -33,6 +33,11 @@ namespace Jellymancer
         public int selectedItem;
         public bool chosen;
 
+        public const int MENU_LEFT = 100;
+        public const int MENU_WIDTH = 300;
+        public const int MENU_TOP = 450;
+        public const int MENU_LINE_HEIGHT = 60;
+
         /// <summary>
         /// Draw the game menu
         /// </summary>
@@ -45,7 +50,7 @@ namespace Jellymancer
             {
                 spriteBatch.DrawString(font,
                                        items[i],
-                                       new Vector2(100, 450 + i * 60),
+                                       new Vector2(MENU_LEFT, MENU_TOP + i * MENU_LINE_HEIGHT),
                                        i == selectedItem ? Color.White : Color.Gray);
                 spriteBatch.Draw(logo, new Vector2(140, 100), Color.White);
             }
@@ -82,6 +87,26 @@ namespace Jellymancer
             {
                 chosen = true;
             }
+
+            if (mousePress[LEFT_BUTTON])
+            {
+                for (int i = 0; i < items.Count; i++)
+                {
+                    var left = MENU_LEFT;
+                    var right = MENU_LEFT + MENU_WIDTH;
+                    var top = MENU_TOP + i * MENU_LINE_HEIGHT;
+                    var bottom = MENU_TOP + (i + 1) * MENU_LINE_HEIGHT;
+                    var m = Mouse.GetState();
+                    if (m.X > left && m.X < right && m.Y > top && m.Y < bottom)
+                    {
+                        chosen = true;
+                        selectedItem = i;
+                        break;
+                    }
+                }
+            }
+
+
         }
 
         private void menuDown()
