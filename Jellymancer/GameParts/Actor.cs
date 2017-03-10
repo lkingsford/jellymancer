@@ -100,6 +100,10 @@ namespace Jellymancer.GameParts
         public virtual void Choke()
         {
             dead = true;
+            foreach(var i in this.characterParts)
+            {
+                i.Choke();
+            }
         }
 
         /// <summary>

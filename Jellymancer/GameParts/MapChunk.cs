@@ -69,9 +69,18 @@ namespace Jellymancer.GameParts
             monsterSprites["rat"] = content.Load<Texture2D>("Game/Sprites/Rat");
             monsterSprites["adventurer5"] = content.Load<Texture2D>("Game/Sprites/Adventurer5"); 
             monsterSprites["adventurer3"] = content.Load<Texture2D>("Game/Sprites/Adventurer3"); 
-            monsterSprites["adventurer4"] = content.Load<Texture2D>("Game/Sprites/Adventurer4"); 
+            monsterSprites["adventurer4"] = content.Load<Texture2D>("Game/Sprites/Adventurer4");
+            monsterSprites["Jelly1"] = content.Load<Texture2D>("Game/Sprites/Jelly1");
+            monsterSprites["Jelly2"] = content.Load<Texture2D>("Game/Sprites/Jelly2");
+            monsterSprites["Jelly3"] = content.Load<Texture2D>("Game/Sprites/Jelly3");
+            monsterSprites["Jelly4"] = content.Load<Texture2D>("Game/Sprites/Jelly4");
 
             GenerateDungeon();
+            //startX = 20;
+            //startY = 20;
+
+            //AddActor(new JellyEnemy(monsterSprites["Jelly1"], monsterSprites["Jelly1"], startX + 5, startY + 5, 4, random, this));
+
         }
 
         public MapTile[,] map;

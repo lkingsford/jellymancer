@@ -176,6 +176,10 @@ namespace Jellymancer.GameParts
             {
                 base.MoveTowards(x, y);
             }
+            catch (System.Exception)
+            {
+                base.MoveTowards(x, y);
+            }
 
             // Sort bits by how close they are to target
             var bitsByDistance = characterParts.OrderByDescending(i => Math.Sqrt(Math.Pow((this.x - x), 2) + Math.Pow((this.y - y), 2)));
@@ -244,7 +248,7 @@ namespace Jellymancer.GameParts
                         if (!currentMap.map[ix, iy].walkable) { continue; }
 
                         // If both, check if monsters on it
-                        if (currentMap.Actors.Any(i => i != target && i.x == ix && i.y == iy)) { continue; }
+                        if (currentMap.Actors.Any(i => i != target && i.x == ix && i.y == iy && !i.dead)) { continue; }
 
                         // Check if borders another part in a cardinal direction
                         bool borders = characterParts.Any(i => (i.x == ix + 1 && i.y == iy) ||

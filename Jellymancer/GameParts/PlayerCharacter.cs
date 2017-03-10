@@ -104,6 +104,10 @@ namespace Jellymancer.GameParts
         /// <param name="actor"></param>
         public override void Killed(Actor actor)
         {
+            foreach (var i in actor.characterParts)
+            {
+                Killed(i);
+            }
             for (var i = 0; i <= actor.jellySizeIncrease; ++i)
             {
                 Grow(actor.x, actor.y);

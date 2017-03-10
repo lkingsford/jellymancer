@@ -205,77 +205,137 @@ namespace Jellymancer
                     int neighboursOccupied = 0;
                     var chokedBy = new Dictionary<Actor, int>();
 
-                    // Check if neighbours are choking or by wall
-                    for (var ix = i.x - 1; ix <= i.x + 1; ++ix)
+                    if (i.characterParts.Count == 0)
                     {
-                        for (var iy = i.y - 1; iy <= i.y + 1; ++iy)
+                        // This is if it's a regular one bit thing
+                        // Check if neighbours are choking or by wall
+                        for (var ix = i.x - 1; ix <= i.x + 1; ++ix)
                         {
-                            if (!Walkable(ix, iy))
+                            for (var iy = i.y - 1; iy <= i.y + 1; ++iy)
                             {
-                                neighboursOccupied += 1;
-                            }
-                            else
-                            {
-                                var a = MonsterOnTile(ix, iy);
-                                if (a != null)
+                                if (!Walkable(ix, iy))
                                 {
-                                    if ((a.choking == true) &&
-                                        (!i.characterParts.Contains(a)) &&
-                                        (!a.characterParts.Contains(i)) &&
-                                        (i != a))
+                                    neighboursOccupied += 1;
+                                }
+                                else
+                                {
+                                    var a = MonsterOnTile(ix, iy);
+                                    if (a != null)
                                     {
-                                        // It was easier to deal with this logical bit seperately
-                                        
-                                        if (((i.parent != null || a.parent != null) && (i.parent != a.parent)) ||
-                                            ((i.parent == null && a.parent == null)))
+                                        if ((a.choking == true) &&
+                                            (!i.characterParts.Contains(a)) &&
+                                            (!a.characterParts.Contains(i)) &&
+                                            (i != a))
                                         {
-                                            neighboursOccupied += 1;
-                                            if (chokedBy.ContainsKey(a))
+                                            // It was easier to deal with this logical bit seperately
+
+                                            if (((i.parent != null || a.parent != null) && (i.parent != a.parent)) ||
+                                                ((i.parent == null && a.parent == null)))
                                             {
-                                                ++chokedBy[a];
+                                                neighboursOccupied += 1;
+                                                if (chokedBy.ContainsKey(a))
+                                                {
+                                                    ++chokedBy[a];
+                                                }
+                                                else
+                                                {
+                                                    chokedBy[a] = 1;
+                                                }
                                             }
-                                            else
-                                            {
-                                                chokedBy[a] = 1;
-                                            }
+
                                         }
-                                        
                                     }
                                 }
                             }
                         }
-                    }
 
-                    if (i.foodOnly)
-                    {
-                        if (neighboursOccupied >= 1)
+                        if (i.foodOnly)
                         {
-                            if (chokedBy.Count > 0)
-                            { 
-                                i.Choke();
-                                var chokedByDude = chokedBy.OrderByDescending(j => j.Value);
-                                chokedByDude.First().Key.Killed(i);
+                            if (neighboursOccupied >= 1)
+                            {
+                                if (chokedBy.Count > 0)
+                                {
+                                    i.Choke();
+                                    var chokedByDude = chokedBy.OrderByDescending(j => j.Value);
+                                    chokedByDude.First().Key.Killed(i);
+                                }
                             }
                         }
-                    }
+                        else
+                        {
+                            if (neighboursOccupied >= 8)
+                            {
+                                if (chokedBy.Count > 0)
+                                {
+                                    i.Choke();
+                                    var chokedByDude = chokedBy.OrderByDescending(j => j.Value);
+                                    chokedByDude.First().Key.Killed(i);
+                                }
+                            }
+                        }
+                    } 
                     else
                     {
-                        if (neighboursOccupied >= 8)
+                        // This is a Jelly and has to be dealt with funnily
+                        // Every bit has to be surrounded by itself or an enemy to die
+                        var parts = i.characterParts.ToList();
+                        parts.Add(i);
+                        int surroundedCount = 0;
+
+                        foreach (var j in parts)
                         {
+                            bool surrounded = true;
+
+                            for (var ix = j.x - 1; ix <= j.x + 1; ++ix)
+                            {
+                                for (var iy = j.y - 1; iy <= j.y + 1; ++iy)
+                                {
+                                    var monsterOnTile = currentMap.Actors.FirstOrDefault(k => (k.x == ix) && (k.y == iy));
+                                    if (monsterOnTile == null || (monsterOnTile != null && monsterOnTile.foodOnly))
+                                    {
+                                        if (currentMap.map[ix, iy].walkable)
+                                        {
+                                            surrounded = false;
+                                            continue;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (!monsterOnTile.parent?.characterParts.Contains(j) ?? false)
+                                        {
+                                            if (chokedBy.ContainsKey(monsterOnTile))
+                                            {
+                                                ++chokedBy[monsterOnTile];
+                                            }
+                                            else
+                                            {
+                                                chokedBy[monsterOnTile] = 1;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if (surrounded) { surroundedCount += 1; };
+                        }
+
+                        if (surroundedCount == parts.Count)
+                        {
+                            i.dead = true;
                             if (chokedBy.Count > 0)
                             {
-                                i.Choke();
                                 var chokedByDude = chokedBy.OrderByDescending(j => j.Value);
                                 chokedByDude.First().Key.Killed(i);
                             }
+                            i.Choke();
+                            currentMap.KillDeadActors();
                         }
+
                     }
                 }
 
                 // Kill deads
                 currentMap.KillDeadActors();
                 
-
                 // Move all the baddies that are kinda close
                 foreach(var i in currentMap.Actors.Where(i=>(Math.Abs(i.x - pc.x) < 20) && (Math.Abs(i.y - pc.y) < 20)))
                 {
