@@ -30,7 +30,7 @@ namespace Jellymancer.GameParts
         /// Sprite that looks like
         /// </summary>
         public Texture2D sprite;
-        
+
         /// <summary>
         /// Location, in respect to current map chunk
         /// </summary>
@@ -48,7 +48,7 @@ namespace Jellymancer.GameParts
         /// Whether food only - turn immediately
         /// </summary>
         public bool foodOnly = false;
-     
+
         /// <summary>
         /// Location which we're on
         /// </summary>
@@ -71,7 +71,7 @@ namespace Jellymancer.GameParts
 
             // These all return if not moveable - so not storing
             // Check for bounds
-            if (desiredx < 0 || desiredy < 0 || desiredx >= currentMap.Width || desiredy >= currentMap.Height) {  return; }
+            if (desiredx < 0 || desiredy < 0 || desiredx >= currentMap.Width || desiredy >= currentMap.Height) { return; }
             // Check for map walkability
             if (!currentMap.map[desiredx, desiredy].walkable) { return; }
             // This checks if any any monsters in space. Technically, might want to attack instead...
@@ -92,7 +92,7 @@ namespace Jellymancer.GameParts
         /// </summary>
         public Actor parent = null;
 
-        public  bool dead = false;
+        public bool dead = false;
 
         /// <summary>
         /// May need to do things
@@ -125,6 +125,10 @@ namespace Jellymancer.GameParts
         public void MoveTowards(Actor a)
         {
             MoveTowards(a.x, a.y);
+        }
+
+        public virtual void Act()
+        {
         }
     }
 }

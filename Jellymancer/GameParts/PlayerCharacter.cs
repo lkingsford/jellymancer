@@ -45,14 +45,26 @@ namespace Jellymancer.GameParts
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public new bool MoveTowards(int x, int y, int depth = 0)
+        public bool MoveTowards(int x, int y, int depth = 0)
         {
-            // If x, y is inside the blob - then get closer to core
-            // if x, y is outside the blob, move blob in dir 
-
-            int dx = Math.Sign(this.x - x) * -1;
-            int dy = Math.Sign(this.y - y) * -1;
-            Move(dx, dy);
+            // Use pathfinding to move towards mouse click
+            try
+            {
+                var path = new DeenGames.Utils.AStarPathFinder.PathFinderFast(currentMap.pathGrid).FindPath(new DeenGames.Utils.Point(this.x, this.y), new DeenGames.Utils.Point(x, y));
+                if (path != null && path.Count > 2)
+                {
+                    var pathPos = (path[path.Count - 2]);
+                    base.MoveTowards(path[path.Count - 2].X, path[path.Count - 2].Y);
+                }
+                else
+                {
+                    base.MoveTowards(x, y);
+                }
+            }
+            catch (IndexOutOfRangeException)
+            {
+                base.MoveTowards(x, y);
+            }
 
             // Sort bits by how close they are to target
             var bitsByDistance = characterParts.OrderByDescending(i => Math.Sqrt(Math.Pow((this.x - x), 2) + Math.Pow((this.y - y), 2)));

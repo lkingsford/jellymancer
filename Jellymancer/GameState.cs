@@ -250,11 +250,12 @@ namespace Jellymancer
 
                 // Kill deads
                 currentMap.KillDeadActors();
+                
 
                 // Move all the baddies
-                foreach(var i in currentMap.Actors.Where(j=>j.GetType()==typeof(BasicEnemy)))
+                foreach(var i in currentMap.Actors)
                 {
-                    ((BasicEnemy)i).Act();
+                    i.Act();
                 }
             }
 

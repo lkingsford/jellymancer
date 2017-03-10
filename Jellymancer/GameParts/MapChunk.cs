@@ -72,6 +72,7 @@ namespace Jellymancer.GameParts
             monsterSprites["meat1"] = content.Load<Texture2D>("Game/Sprites/Meat1");
             monsterSprites["meat2"] = content.Load<Texture2D>("Game/Sprites/Meat2");
             monsterSprites["meat3"] = content.Load<Texture2D>("Game/Sprites/Meat3");
+            monsterSprites["rat"] = content.Load<Texture2D>("Game/Sprites/Rat");
 
             GenerateDungeon();
         }
@@ -235,6 +236,19 @@ namespace Jellymancer.GameParts
                 }
                 var key = $"meat{random.Next(1, 4)}";
                 AddActor(new Food(monsterSprites[key], ix, iy));
+            }
+
+            // Add Critters
+            for (var i = 0; i < (Width * Height) / 50; ++i)
+            {
+                var ix = 0;
+                var iy = 0;
+                while (!map[ix, iy].walkable)
+                {
+                    ix = random.Next(0, Width);
+                    iy = random.Next(0, Height);
+                }
+                AddActor(new Critter(monsterSprites["rat"], ix, iy, random));
             }
 
             UpdatePathGrid();
