@@ -19,9 +19,12 @@ namespace Jellymancer.GameParts
         public override void Act()
         {
             // Find the PC
-            var pc = currentMap.Actors.First(i => i.GetType() == typeof(PlayerCharacter));
+            var pc = currentMap.Actors.FirstOrDefault(i => i.GetType() == typeof(PlayerCharacter));
 
-            MoveTowards(pc);
+            if (pc != null)
+            {
+                MoveTowards(pc);
+            }
         }
 
         public override void MoveTowards(int x, int y)

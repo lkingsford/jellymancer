@@ -22,7 +22,7 @@
 	- [x] Basic single tile enemy
 		- [x] Pathfinding 😒
 - [ ] **Dungeon building 102**
-	- [ ] Basic jelly enemy
+	- [x] Basic jelly enemy
 	- [ ] Bigger jelly enemy as win condition
 	- [ ] Display text on winning
 - [ ] **World building**

@@ -74,6 +74,8 @@ namespace Jellymancer.GameParts
             monsterSprites["Jelly2"] = content.Load<Texture2D>("Game/Sprites/Jelly2");
             monsterSprites["Jelly3"] = content.Load<Texture2D>("Game/Sprites/Jelly3");
             monsterSprites["Jelly4"] = content.Load<Texture2D>("Game/Sprites/Jelly4");
+            monsterSprites["GluttonBody"] = content.Load<Texture2D>("Game/Sprites/GluttonBody");
+            monsterSprites["GluttonCore"] = content.Load<Texture2D>("Game/Sprites/GluttonCore");
 
             GenerateDungeon();
         }
@@ -276,6 +278,30 @@ namespace Jellymancer.GameParts
                 }
             }
 
+            // Add More monsters lower
+            for (var i = 0; i < (Width * Height / 3) / 300; ++i)
+            {
+                var ix = 0;
+                var iy = 0;
+                while (!map[ix, iy].walkable)
+                {
+                    ix = random.Next(0, Width);
+                    iy = random.Next(Height / 3, Height);
+                }
+                switch (random.Next(0, 3))
+                {
+                    case 0:
+                        AddActor(new BasicEnemy(monsterSprites["adventurer3"], ix, iy));
+                        break;
+                    case 1:
+                        AddActor(new BasicEnemy(monsterSprites["adventurer4"], ix, iy));
+                        break;
+                    case 2:
+                        AddActor(new BasicEnemy(monsterSprites["adventurer5"], ix, iy));
+                        break;
+                }
+            }
+
             // Add some jellys
             for (var i = 0; i < 10; ++i)
             {
@@ -288,6 +314,38 @@ namespace Jellymancer.GameParts
                 }
                 Texture2D sprite = monsterSprites[$"Jelly{random.Next(1, 5)}"];
                 AddActor(new JellyEnemy(sprite, sprite, ix, iy, random.Next(2, 5), random, this));
+            }
+
+            // Add some bigger jellys lower
+            for (var i = 0; i < 5; ++i)
+            {
+                var ix = 0;
+                var iy = 0;
+                while (!map[ix, iy].walkable)
+                {
+                    ix = random.Next(0, Width);
+                    iy = random.Next(Height * 2 / 3, Height);
+                }
+                Texture2D sprite = monsterSprites[$"Jelly{random.Next(1, 5)}"];
+                AddActor(new JellyEnemy(sprite, sprite, ix, iy, random.Next(3, 6), random, this));
+            }
+
+            // Add THE GLUTTON (who won't be that much tougher really)
+            {
+                var ix = 0;
+                var iy = 5;
+                while (!map[ix, iy].walkable)
+                {
+                    ix = random.Next(0, Width);
+                    //iy = random.Next(Height * 5 / 6, Height);
+                }
+                AddActor(new GluttonEnemy(monsterSprites["GluttonCore"],
+                                          monsterSprites["GluttonBody"],
+                                          ix,
+                                          iy,
+                                          3,
+                                          random,
+                                          this));
             }
 
             UpdatePathGrid();

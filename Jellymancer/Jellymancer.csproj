@@ -60,6 +60,7 @@
     <Compile Include="GameParts\Critter.cs" />
     <Compile Include="GameParts\Food.cs" />
     <Compile Include="GameParts\GlobalMap.cs" />
+    <Compile Include="GameParts\GluttonEnemy.cs" />
     <Compile Include="GameParts\JellyEnemy.cs" />
     <Compile Include="GameParts\MapChunk.cs" />
     <Compile Include="GameParts\PlayerCharacter.cs" />
