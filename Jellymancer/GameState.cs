@@ -47,9 +47,8 @@ namespace Jellymancer
             currentMap = globalMap.GetChunk(0, 0);
             pc = new PlayerCharacter(content.Load<Texture2D>("Game/Sprites/JellyCore"),
                                      content.Load<Texture2D>("Game/Sprites/JellyBody"),
-                                     currentMap.startX, currentMap.startY);
+                                     currentMap.startX, currentMap.startY, rng);
             currentMap.AddActor(pc);
-            pc.rng = rng;
             pc.ExplodeAndPullIn();
 
             healthui = new Texture2D[5];

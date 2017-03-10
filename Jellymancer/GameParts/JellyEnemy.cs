@@ -9,9 +9,11 @@ namespace Jellymancer.GameParts
 {
     class JellyEnemy : JellyBit
     {
-        public JellyEnemy(Texture2D sprite, Texture2D jellyPartSprite, int x, int y) : base (sprite, x, y)
+        public JellyEnemy(Texture2D sprite, Texture2D jellyPartSprite, int x, int y, int size, Random rng) : base (sprite, x, y, rng)
         {
-
+            for (var i = 0; i <= size; ++i)
+            {
+            }
         }
     }
 }
