@@ -53,6 +53,9 @@
     <Compile Include="State.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Karcero">
+      <HintPath>..\Lib\Karcero.dll</HintPath>
+    </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>

@@ -1,0 +1,727 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Karcero</name>
+    </assembly>
+    <members>
+        <member name="T:Karcero.Engine.Contracts.IBaseCell">
+            <summary>
+            Base interface for cell type
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Contracts.IBaseCell.Row">
+            <summary>
+            The cell's row in the map (will be set by the generator).
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Contracts.IBaseCell.Column">
+            <summary>
+            The cell's column in the map (will be set by the generator).
+            </summary>
+        </member>
+        <member name="T:Karcero.Engine.Contracts.IMapProcessor`1">
+            <summary>
+            A map processor performs some sort of modification to the map. The DungeonGenerator will apply any map processors added after the
+            initial map generation process.
+            </summary>
+            <typeparam name="T">The actual type of the cell class the map is comprised of.</typeparam>
+        </member>
+        <member name="M:Karcero.Engine.Contracts.IMapProcessor`1.ProcessMap(Karcero.Engine.Models.Map{`0},Karcero.Engine.Models.DungeonConfiguration,Karcero.Engine.Contracts.IRandomizer)">
+            <summary>
+            The method that performs the map modification. Will be called by the DungeonGenerator.
+            </summary>
+            <param name="map">The map to perform the modification on.</param>
+            <param name="configuration">The configuration for the map generation process.</param>
+            <param name="randomizer">The randomizer to use during the processing.</param>
+        </member>
+        <member name="T:Karcero.Engine.Contracts.IRandomizer">
+            <summary>
+            Contains several methods that fetch a value randomly.
+            </summary>
+        </member>
+        <member name="M:Karcero.Engine.Contracts.IRandomizer.SetSeed(System.Int32)">
+            <summary>
+            The seed for any randomized operation. A random seed will be generated if one is not supplied.
+            </summary>
+            <param name="seed"></param>
+        </member>
+        <member name="M:Karcero.Engine.Contracts.IRandomizer.GetRandomCell``1(Karcero.Engine.Models.Map{``0})">
+            <summary>
+            Get a random cell of any terrain from the map.
+            </summary>
+            <param name="map">The map.</param>
+            <typeparam name="T">The actual type of the cell class the map is comprised of.</typeparam>
+            <returns>A random cell from the map.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Contracts.IRandomizer.GetRandomEnumValue``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Get a random value from the values of an enum.
+            </summary>
+            <param name="excluded">Any values to be excluded from the enum's set of values.</param>
+            <typeparam name="TItem">The type of the enum.</typeparam>
+            <returns>A random value of TItem.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Contracts.IRandomizer.GetRandomItem``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Get a random value from a collection.
+            </summary>
+            <param name="collection">The collection of values.</param>
+            <typeparam name="TItem">The type of values the collection holds.</typeparam>
+            <returns>A random item from the collection.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Contracts.IRandomizer.GetRandomDouble">
+            <summary>
+            Get a random double.
+            </summary>
+            <returns>A random double.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Contracts.IRandomizer.GetRandomRoomSize(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Get a random room size within the measurements supplied.
+            </summary>
+            <param name="minWidth">The min room width.</param>
+            <param name="maxWidth">the max room width.</param>
+            <param name="minHeight">The min room height.</param>
+            <param name="maxHeight">The max room height.</param>
+            <returns>A random room size within the measurements supplied.</returns>
+        </member>
+        <member name="T:Karcero.Engine.Contracts.ICell">
+            <summary>
+            The interface a class must implement to be passed as the map cell type to the generator.
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Contracts.ICell.Terrain">
+            <summary>
+            The cell's terrain.
+            </summary>
+        </member>
+        <member name="T:Karcero.Engine.DungeonGenerator`1">
+            <summary>
+            Generates a map of cells of type T.
+            </summary>
+            <typeparam name="T">The type of cells the map is comprised of.</typeparam>
+        </member>
+        <member name="M:Karcero.Engine.DungeonGenerator`1.#ctor">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="M:Karcero.Engine.DungeonGenerator`1.AddMapProcessor(Karcero.Engine.Contracts.IMapProcessor{`0})">
+            <summary>
+            Add a map processor that will be called at the end of the map generation library to further modify the map.
+            </summary>
+            <param name="mapProcessor">The processor to add.</param>
+        </member>
+        <member name="M:Karcero.Engine.DungeonGenerator`1.GenerateA">
+            <summary>
+            Creates an instance of the DungeonConfigurationGenerator that is linked to this instance.
+            </summary>
+            <returns>An instance of DungeonConfigurationGenerator linked to this instance of DungeonGenerator.</returns>
+        </member>
+        <member name="M:Karcero.Engine.DungeonGenerator`1.Generate(Karcero.Engine.Models.DungeonConfiguration,System.Nullable{System.Int32})">
+            <summary>
+            Generate a map according the configuration received.
+            </summary>
+            <param name="config">The configuration used to generate the map.</param>
+            <param name="seed">A seed to be used for the generation. If null a random seed will be generated.</param>
+            <returns>The generated map.</returns>
+        </member>
+        <member name="M:Karcero.Engine.DungeonGenerator`1.BeginGenerate(System.Action{Karcero.Engine.Models.Map{`0}},Karcero.Engine.Models.DungeonConfiguration,System.Nullable{System.Int32})">
+            <summary>
+            Generates a map on a different thread.
+            </summary>
+            <param name="callback">Will be called when the generation is complete (on a different thread).</param>
+            <param name="config">The configuration used to generate the map.</param>
+            <param name="seed">A seed to be used for the generation. If null a random seed will be generated.</param>
+        </member>
+        <member name="T:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1">
+            <summary>
+            Generates a configuration with a set of fluent API methods.
+            </summary>
+            <typeparam name="T">The type of cell the map will be comprised of.</typeparam>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.#ctor(Karcero.Engine.DungeonGenerator{`0})">
+            <summary>
+            Creates an instance that is linked to the generator passed.
+            </summary>
+            <param name="dungeonGenerator">The generator this instance is linked to.</param>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.DungeonOfSize(System.Int32,System.Int32)">
+            <summary>
+            Sets the size to specific measurements.
+            </summary>
+            <param name="width">The desired width.</param>
+            <param name="height">The desired height.</param>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.TinyDungeon">
+            <summary>
+            Sets the desired size to 17x17.
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.SmallDungeon">
+            <summary>
+            Sets the desired size to 25x25.
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.MediumDungeon">
+            <summary>
+            Sets the desired size to 33x33.
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.LargeDungeon">
+            <summary>
+            Sets the desired size to 45x45.
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.HugeDungeon">
+            <summary>
+            Sets the desired size to 100x100.
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.WithRandomness(System.Double)">
+            <summary>
+            Sets randomness to a specific value.
+            </summary>
+            <param name="randomness">The desired randomness value.</param>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.NotRandom">
+            <summary>
+            Sets randomness to 0.
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.ABitRandom">
+            <summary>
+            Sets randomness to 0.3.
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.SomewhatRandom">
+            <summary>
+            Sets randomness to 0.6.
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.VeryRandom">
+            <summary>
+            Sets randomness to 1.
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.WithSparseness(System.Double)">
+            <summary>
+            Sets sparseness to a specific value.
+            </summary>
+            <param name="sparseness">The desired sparseness value.</param>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.NotSparse">
+            <summary>
+            Sets sparseness to 0.
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.ABitSparse">
+            <summary>
+            Sets sparseness to 0.3.
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.SomewhatSparse">
+            <summary>
+            Sets sparseness to 0.6.
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.VerySparse">
+            <summary>
+            Sets sparseness to 0.8.
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.WithChanceToRemoveDeadEnds(System.Double)">
+            <summary>
+            Sets the chance to remove dead ends to a specific value.
+            </summary>
+            <param name="chance">The desired chance value.</param>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.DontRemoveDeadEnds">
+            <summary>
+            Sets the chance to remove dead ends to 0.
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.WithSmallChanceToRemoveDeadEnds">
+            <summary>
+            Sets the chance to remove dead ends to 0.23
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.WithMediumChanceToRemoveDeadEnds">
+            <summary>
+            Sets the chance to remove dead ends to 0.53
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.WithBigChanceToRemoveDeadEnds">
+            <summary>
+            Sets the chance to remove dead ends to 0.8.
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.RemoveAllDeadEnds">
+            <summary>
+            Sets the chance to remove dead ends to 1.
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.WithRoomSize(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Sets the room size range to specific measurements.
+            </summary>
+            <param name="minWidth">The minimum desired width.</param>
+            <param name="maxWidth">The maximum desired width.</param>
+            <param name="minHeight">The minimum desired height.</param>
+            <param name="maxHeight">The maximum desired height.</param>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.WithSmallSizeRooms">
+            <summary>
+            Sets the room size range to small to between 2x2 and 3x3.
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.WithMediumSizeRooms">
+            <summary>
+            Sets the room size range to small to between 3x3 and 6x6.
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.WithLargeSizeRooms">
+            <summary>
+            Sets the room size range to small to between 5x5 and 8x8.
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.WithRoomCount(System.Int32)">
+            <summary>
+            Sets the desired room count to a specific value
+            </summary>
+            <param name="roomCount">The desired room count.</param>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.WithSmallNumberOfRooms">
+            <summary>
+            Sets the desired room count to a small value computed according to room size and map size.
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.WithMediumNumberOfRooms">
+            <summary>
+            Sets the desired room count to a medium value computed according to room size and map size.
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.WithLargeNumberOfRooms">
+            <summary>
+            Sets the desired room count to a large value computed according to room size and map size.
+            </summary>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.WithSeed(System.Int32)">
+            <summary>
+            Sets the seed for the map generation to a specific value.
+            </summary>
+            <param name="seed">The desired seed.</param>
+            <returns>The same instance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.Now">
+            <summary>
+            Generates the map with the generated configuration synchronously.
+            </summary>
+            <returns>The generated map.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.DungeonConfigurationGenerator`1.AndTellMeWhenItsDone(System.Action{Karcero.Engine.Models.Map{`0}})">
+            <summary>
+            Generates the map with the generated configuration asynchronously.
+            </summary>
+            <param name="callback">Will be called when the generation process is complete (on a different thread).</param>
+        </member>
+        <member name="T:Karcero.Engine.Helpers.GetAll">
+            <summary>
+            Helper methods for enumerations
+            </summary>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.GetAll.ValuesOf``1">
+            <summary>
+            Returns a collection that contains all of the enum's values.
+            </summary>
+            <typeparam name="T">The type of the enum.</typeparam>
+            <returns>A collection that contains all of the enum's values.</returns>
+        </member>
+        <member name="T:Karcero.Engine.Helpers.Randomizer">
+            <summary>
+            Default implementation of IRandomizer using the Random class.
+            </summary>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.Randomizer.SetSeed(System.Int32)">
+            <summary>
+            The seed for any randomized operation. A random seed will be generated if one is not supplied.
+            </summary>
+            <param name="seed"></param>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.Randomizer.GetRandomCell``1(Karcero.Engine.Models.Map{``0})">
+            <summary>
+            Get a random cell of any terrain from the map.
+            </summary>
+            <param name="map">The map.</param>
+            <typeparam name="T">The actual type of the cell class the map is comprised of.</typeparam>
+            <returns>A random cell from the map.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.Randomizer.GetRandomEnumValue``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Get a random value from the values of an enum.
+            </summary>
+            <param name="excluded">Any values to be excluded from the enum's set of values.</param>
+            <typeparam name="TItem">The type of the enum.</typeparam>
+            <returns>A random value of TItem.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.Randomizer.GetRandomItem``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Get a random value from a collection.
+            </summary>
+            <param name="collection">The collection of values.</param>
+            <typeparam name="TItem">The type of values the collection holds.</typeparam>
+            <returns>A random item from the collection.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.Randomizer.GetRandomDouble">
+            <summary>
+            Get a random double.
+            </summary>
+            <returns>A random double.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Helpers.Randomizer.GetRandomRoomSize(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Get a random room size within the measurements supplied.
+            </summary>
+            <param name="minWidth">The min room width.</param>
+            <param name="maxWidth">the max room width.</param>
+            <param name="minHeight">The min room height.</param>
+            <param name="maxHeight">The max room height.</param>
+            <returns>A random room size within the measurements supplied.</returns>
+        </member>
+        <member name="T:Karcero.Engine.Models.Size">
+            <summary>
+            A measurement of size.
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Models.Size.Height">
+            <summary>
+            The height.
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Models.Size.Width">
+            <summary>
+            The width.
+            </summary>
+        </member>
+        <member name="M:Karcero.Engine.Models.Size.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Returns an instance with the specified measurements.
+            </summary>
+            <param name="width"></param>
+            <param name="height"></param>
+        </member>
+        <member name="T:Karcero.Engine.Models.Cell">
+            <summary>
+            Default implementation of the ICell interface.
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Models.Cell.Row">
+            <summary>
+            The cell's row in the map (will be set by the generator).
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Models.Cell.Column">
+            <summary>
+            The cell's column in the map (will be set by the generator).
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Models.Cell.Terrain">
+            <summary>
+            The cell's terrain.
+            </summary>
+        </member>
+        <member name="T:Karcero.Engine.Models.TerrainType">
+            <summary>
+            An enumeration containing the types of terrain a cell can have.
+            </summary>
+        </member>
+        <member name="F:Karcero.Engine.Models.TerrainType.Rock">
+            <summary>
+            A rock/wall, probably impassable.
+            </summary>
+        </member>
+        <member name="F:Karcero.Engine.Models.TerrainType.Floor">
+            <summary>
+            Open ground.
+            </summary>
+        </member>
+        <member name="F:Karcero.Engine.Models.TerrainType.Door">
+            <summary>
+            A doorway to a room.
+            </summary>
+        </member>
+        <member name="T:Karcero.Engine.Models.Direction">
+            <summary>
+            Cardinal directions.
+            </summary>
+        </member>
+        <member name="F:Karcero.Engine.Models.Direction.North">
+            <summary>
+            Represented on the map as up.
+            </summary>
+        </member>
+        <member name="F:Karcero.Engine.Models.Direction.East">
+            <summary>
+            Represented on the map as right.
+            </summary>
+        </member>
+        <member name="F:Karcero.Engine.Models.Direction.South">
+            <summary>
+            Represented on the map as down.
+            </summary>
+        </member>
+        <member name="F:Karcero.Engine.Models.Direction.West">
+            <summary>
+            Represented on the map as left.
+            </summary>
+        </member>
+        <member name="T:Karcero.Engine.Models.Extensions">
+            <summary>
+            Helper methods for the Direction enumeration.
+            </summary>
+        </member>
+        <member name="M:Karcero.Engine.Models.Extensions.Opposite(Karcero.Engine.Models.Direction)">
+            <summary>
+            Returns the opposite cardinal direction to.
+            </summary>
+            <param name="direction">The initial direction.</param>
+            <returns>The opposite cardinal direction.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Models.Extensions.Rotate(Karcero.Engine.Models.Direction,System.Boolean)">
+            <summary>
+            Rotate a cardinal direction clockwise or anti-clockwise.
+            </summary>
+            <param name="direction">The direction to rotate</param>
+            <param name="clockwise">True for clockwise, false for anti-clockwise.</param>
+            <returns>The rotated direction.</returns>
+        </member>
+        <member name="T:Karcero.Engine.Models.DungeonConfiguration">
+            <summary>
+            Contains several properties that will set and affect characteristics of the map generation process.
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Models.DungeonConfiguration.Height">
+            <summary>
+            The height of the map.
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Models.DungeonConfiguration.Width">
+            <summary>
+            The width of the map.
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Models.DungeonConfiguration.Randomness">
+            <summary>
+            Controls how random the map is (how many twists and turns).
+            Value is between 0 and 1, higher value means more random.
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Models.DungeonConfiguration.Sparseness">
+            <summary>
+            Controls how sparse the map is. 
+            Value is between 0 and 1, higher value means more sparse.
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Models.DungeonConfiguration.ChanceToRemoveDeadends">
+            <summary>
+            Controls how many dead ends are left.
+            Value is between 0 and 1, higher value == less dead ends.
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Models.DungeonConfiguration.MinRoomWidth">
+            <summary>
+            Minimum width for room generation.
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Models.DungeonConfiguration.MaxRoomWidth">
+            <summary>
+            Maximum width for room generation.
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Models.DungeonConfiguration.MinRoomHeight">
+            <summary>
+            Minimum height for room generation.
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Models.DungeonConfiguration.MaxRoomHeight">
+            <summary>
+            Maximum height for room generation.
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Models.DungeonConfiguration.RoomCount">
+            <summary>
+            Number of rooms to generate.
+            </summary>
+        </member>
+        <member name="M:Karcero.Engine.Models.DungeonConfiguration.#ctor">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="T:Karcero.Engine.Models.Map`1">
+            <summary>
+            A matrix of cells.
+            </summary>
+            <typeparam name="T">The type of cells the map is comprised of.</typeparam>
+        </member>
+        <member name="P:Karcero.Engine.Models.Map`1.Height">
+            <summary>
+            The height of the map.
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Models.Map`1.Width">
+            <summary>
+            The width of the map.
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Models.Map`1.Rooms">
+            <summary>
+            A collection of rooms that the are contained in the map.
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Models.Map`1.AllCells">
+            <summary>
+            A collection of all of the cells in the map generated with a LINQ operation (order not guaranteed).
+            </summary>
+        </member>
+        <member name="M:Karcero.Engine.Models.Map`1.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Returns an instance initialized to the sizes specified.
+            </summary>
+            <param name="width">The desired width of the map.</param>
+            <param name="height">The desired height of the map.</param>
+        </member>
+        <member name="M:Karcero.Engine.Models.Map`1.GetAdjacentCell(`0,Karcero.Engine.Models.Direction,System.Int32)">
+            <summary>
+            Returns an the adjacent cell of the specified cell to a certain direction and distance.
+            </summary>
+            <param name="cell">The initial cell.</param>
+            <param name="direction">The direction of the desired adjacent cell.</param>
+            <param name="distance">How many cells apart the adjacent cell returned is (defaults to 1).</param>
+            <returns>The adjacent cell to the direction and distance specified.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Models.Map`1.TryGetAdjacentCell(`0,Karcero.Engine.Models.Direction,`0@)">
+            <summary>
+            Try and get the adjacent cell of the specified cell to a certain direction and distance.
+            </summary>
+            <param name="cell">The initial cell.</param>
+            <param name="direction">The direction of the desired adjacent cell.</param>
+            <param name="adjacentCell">Will be set to the adjacent cell if exists, null otherwise.</param>
+            <returns>True if the desired adjacent exists.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Models.Map`1.GetCell(System.Int32,System.Int32)">
+            <summary>
+            Returns the cell in a specified location.
+            </summary>
+            <param name="row">The row of the desired cell.</param>
+            <param name="column">The column of the desired cell.</param>
+            <returns>The desired cell if exists, null otherwise.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Models.Map`1.GetRoomCells(Karcero.Engine.Models.Room)">
+            <summary>
+            Get the cells the specified room is comprised of.
+            </summary>
+            <param name="room">The desired room.</param>
+            <returns>The cells the specified room is comprised of.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Models.Map`1.GetCellsAdjacentToRoom(Karcero.Engine.Models.Room,System.Int32)">
+            <summary>
+            Get the cells adjacent to all of the edges of the room specified in a certain distance.
+            </summary>
+            <param name="room">The desired room.</param>
+            <param name="distance">The desired distance (defaults to 1).</param>
+            <returns>A collection of all of the cells adjacent to all of the edges of the room specified in the desired distance.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Models.Map`1.IsLocationInRoom(System.Int32,System.Int32)">
+            <summary>
+            Returns true if a cell location is inside any room on the map.
+            </summary>
+            <param name="row">The desired row.</param>
+            <param name="column">The desired column.</param>
+            <returns>True if the specified location is in any room on the map.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Models.Map`1.GetAllAdjacentCells(`0,System.Boolean)">
+            <summary>
+            Returns all of the adjacent cells of the specified cell.
+            </summary>
+            <param name="cell">The desired cell.</param>
+            <param name="includeDiagonalCells">True if diagonal adjacent cells should be included (defaults to false).</param>
+            <returns>All of the adjacent cells of the specified cell.</returns>
+        </member>
+        <member name="M:Karcero.Engine.Models.Map`1.GetAllAdjacentCellsByDirection(`0)">
+            <summary>
+            Returns all of the adjacent cells of the specified cell by cardinal direction.
+            </summary>
+            <param name="cell">The desired cell.</param>
+            <returns>All of the adjacent cells of the specified cell by cardinal direction..</returns>
+        </member>
+        <member name="T:Karcero.Engine.Models.Room">
+            <summary>
+            A room contained in a map.
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Models.Room.Row">
+            <summary>
+            The room's top row (inclusive).
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Models.Room.Column">
+            <summary>
+            The room's left column (inclusive).
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Models.Room.Size">
+            <summary>
+            The size of the room.
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Models.Room.Bottom">
+            <summary>
+            The room's bottom row (exclusive).
+            </summary>
+        </member>
+        <member name="P:Karcero.Engine.Models.Room.Right">
+            <summary>
+            The room's right column (exclusive).
+            </summary>
+        </member>
+        <member name="M:Karcero.Engine.Models.Room.IsLocationInRoom(System.Int32,System.Int32)">
+            <summary>
+            Returns true if a certain location is within the specified room.
+            </summary>
+            <param name="row">The desired row.</param>
+            <param name="column">The desired column.</param>
+            <returns>True if a certain location is within the specified room.</returns>
+        </member>
+    </members>
+</doc>

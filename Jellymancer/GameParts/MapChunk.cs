@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace Jellymancer.GameParts
     /// </summary>
     class MapChunk
     {
+        private MapTile floor, wall, nothing;
+
         /// <summary>
         /// Create new map chunk
         /// </summary>
@@ -26,8 +29,9 @@ namespace Jellymancer.GameParts
             map = new MapTile[width, height];
 
             // Archeotypes
-            var floor = new MapTile(content.Load<Texture2D>("Game/Tiles/Floor"), true); 
-            var wall = new MapTile(content.Load<Texture2D>("Game/Tiles/Wall"), false); 
+            floor = new MapTile(content.Load<Texture2D>("Game/Tiles/Floor"), true); 
+            wall = new MapTile(content.Load<Texture2D>("Game/Tiles/Wall"), false); 
+            nothing = new MapTile(content.Load<Texture2D>("Game/Tiles/Empty"), false); 
 
             // Fill Inside with Floor
             for (var ix = 1; ix < width - 1; ++ix)
@@ -58,6 +62,8 @@ namespace Jellymancer.GameParts
             AddActor(new GameParts.Actor(content.Load<Texture2D>("Game/Sprites/Adventurer3"), 5, 10));
             AddActor(new GameParts.Actor(content.Load<Texture2D>("Game/Sprites/Adventurer4"), 5, 5));
             AddActor(new GameParts.Actor(content.Load<Texture2D>("Game/Sprites/Adventurer5"), 15, 5));
+
+            GenerateDungeon();
         }
 
         public MapTile[,] map;
@@ -112,5 +118,52 @@ namespace Jellymancer.GameParts
         {
             actors.RemoveAll(i => i.dead);
         }
+
+        /// <summary>
+        /// Turn this into a fun lovin' dungeon
+        /// </summary>
+        public void GenerateDungeon()
+        {
+            // Fill with nothing
+            for (var ix = 0; ix < this.Width; ++ix)
+            {
+                for (var iy = 0; iy < this.Height; ++iy)
+                {
+                    map[ix, iy] = nothing;
+                }
+            }
+
+            var generator = new Karcero.Engine.DungeonGenerator<Karcero.Engine.Models.Cell>();
+
+            var generatedMap = generator.GenerateA()
+                     .MediumDungeon()
+                     .ABitRandom()
+                     .SomewhatSparse()
+                     .WithMediumChanceToRemoveDeadEnds()
+                     .WithMediumSizeRooms()
+                     .WithLargeNumberOfRooms()
+                     .Now();
+
+            for (var ix = 0; ix < generatedMap.Width; ++ix)
+            {
+                for (var iy = 0; iy < generatedMap.Height ; ++iy)
+                {
+                    // Row, Column . Urgh.
+                    var c = generatedMap.GetCell(iy, ix);
+                    switch(c.Terrain)
+                    {
+                        case Karcero.Engine.Models.TerrainType.Rock:
+                            map[ix, iy] = wall;
+                            break;
+                        case Karcero.Engine.Models.TerrainType.Floor:
+                        case Karcero.Engine.Models.TerrainType.Door:
+                            map[ix, iy] = floor;
+                            break;
+                    }
+                }
+            }
+
+        }
+
     }
 }
