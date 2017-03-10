@@ -166,9 +166,9 @@ namespace Jellymancer.GameParts
             }
 
             // Make corrodors 2 or 3 wide usually
-            for (var ix = 1; ix < (generatedMap.Width - 2); ++ix)
+            for (var ix = 2; ix < (generatedMap.Width - 3); ++ix)
             {
-                for (var iy = 1; iy < (generatedMap.Height -2); ++iy)
+                for (var iy = 2; iy < (generatedMap.Height -3); ++iy)
                 {
                     if (map[ix, iy].walkable && (!map[ix - 1, iy].walkable && !map[ix + 1, iy].walkable && map[ix, iy - 1].walkable && map[ix, iy + 1].walkable))
                     {
@@ -205,7 +205,7 @@ namespace Jellymancer.GameParts
                 }
             }
 
-            var startRoom = generatedMap.Rooms.First();
+            var startRoom = generatedMap.Rooms.OrderBy(i => i.Row).First();
 
             startX = (startRoom.Column + startRoom.Right) / 2;
             startY = (startRoom.Row + startRoom.Bottom) / 2;
