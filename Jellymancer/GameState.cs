@@ -296,7 +296,10 @@ namespace Jellymancer
         private void GameOver()
         {
             states.Remove(this);
-            states.Add(new GameOverState(content));
+            var gameOverState = new GameOverState(content);
+            gameOverState.LoadContent();
+            gameOverState.SpriteBatch = SpriteBatch;
+            states.Add(gameOverState);
         }
     }
 }

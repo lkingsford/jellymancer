@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Jellymancer
 {
@@ -15,14 +16,23 @@ namespace Jellymancer
             this.content = content;
         }
 
+        Texture2D gameOverTitle;
+
         public override void LoadContent()
         {
+            gameOverTitle = content.Load<Texture2D>("GameOver/GameOver");
             base.LoadContent();
         }
 
         public override void Draw(GameTime gametime)
         {
             base.Update(gametime);
+            spriteBatch.GraphicsDevice.Clear(Color.White);
+            spriteBatch.Begin();
+            spriteBatch.Draw(gameOverTitle,
+                             new Vector2((1280 - gameOverTitle.Width) / 2, 100),
+                             Color.White);
+            spriteBatch.End();
         }
 
         public override void Update(GameTime gametime)
