@@ -48,8 +48,15 @@ namespace Jellymancer
             currentMap.AddActor(pc);
             pc.rng = rng;
             pc.ExplodeAndPullIn();
+
+            healthui = new Texture2D[5];
+            healthui[4] = content.Load<Texture2D>("Game/UI/Health4");
+            healthui[3] = content.Load<Texture2D>("Game/UI/Health3");
+            healthui[2] = content.Load<Texture2D>("Game/UI/Health2");
+            healthui[1] = content.Load<Texture2D>("Game/UI/Health1");
         }
 
+        Texture2D[] healthui;
 
         // Tile dimesons in pixels
         const int TILE_WIDTH = 32;
@@ -119,6 +126,10 @@ namespace Jellymancer
                                      Color.White);
                 }
             }
+
+            // Draw health
+            spriteBatch.Draw(healthui[pc.hp], new Vector2(50, 50), Color.White);
+
 
             spriteBatch.End();
             base.Draw(gameTime);

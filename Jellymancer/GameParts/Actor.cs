@@ -49,6 +49,11 @@ namespace Jellymancer.GameParts
         /// </summary>
         public MapChunk currentMap = null;
 
+        public virtual void Attacked(Actor monsterInPos)
+        {
+            this.dead = true;
+        }
+
         /// <summary>
         /// Move/Act dx, dy if possible
         /// </summary>

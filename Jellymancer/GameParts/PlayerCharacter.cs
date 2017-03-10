@@ -30,6 +30,7 @@ namespace Jellymancer.GameParts
                     }
                 }
             }
+            hp = 4;
             choking = true;
         }
 
@@ -141,6 +142,7 @@ namespace Jellymancer.GameParts
         }
 
         int visitNo = 0;
+        public int hp;
 
         /// <summary>
         /// Breadth first mess
@@ -164,6 +166,19 @@ namespace Jellymancer.GameParts
             for (int i = 0; i < neighbours.Count(); ++i)
             {
                 visit(neighbours[i].actor, visitList);
+            }
+        }
+
+        /// <summary>
+        /// Attacked by monster
+        /// </summary>
+        /// <param name="monsterInPos"></param>
+        public override void Attacked(Actor monsterInPos)
+        {
+            this.hp -= 1;
+            if (this.hp == 0)
+            {
+                this.dead = true;
             }
         }
 

@@ -47,7 +47,7 @@ namespace Jellymancer.GameParts
             }
             else
             {
-                monsterInPos.dead = true;
+                monsterInPos.Attacked(monsterInPos);
             }
         }
     }
