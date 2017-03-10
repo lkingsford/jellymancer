@@ -63,16 +63,13 @@ namespace Jellymancer.GameParts
             Width = width;
             Height = height;
 
-            AddActor(new GameParts.BasicEnemy(content.Load<Texture2D>("Game/Sprites/Adventurer1"), 10, 10));
-            AddActor(new GameParts.BasicEnemy(content.Load<Texture2D>("Game/Sprites/Adventurer2"), 15, 10));
-            AddActor(new GameParts.BasicEnemy(content.Load<Texture2D>("Game/Sprites/Adventurer3"), 5, 10));
-            AddActor(new GameParts.BasicEnemy(content.Load<Texture2D>("Game/Sprites/Adventurer4"), 5, 5));
-            AddActor(new GameParts.BasicEnemy(content.Load<Texture2D>("Game/Sprites/Adventurer5"), 15, 5));
-
             monsterSprites["meat1"] = content.Load<Texture2D>("Game/Sprites/Meat1");
             monsterSprites["meat2"] = content.Load<Texture2D>("Game/Sprites/Meat2");
             monsterSprites["meat3"] = content.Load<Texture2D>("Game/Sprites/Meat3");
             monsterSprites["rat"] = content.Load<Texture2D>("Game/Sprites/Rat");
+            monsterSprites["adventurer5"] = content.Load<Texture2D>("Game/Sprites/Adventurer5"); 
+            monsterSprites["adventurer3"] = content.Load<Texture2D>("Game/Sprites/Adventurer3"); 
+            monsterSprites["adventurer4"] = content.Load<Texture2D>("Game/Sprites/Adventurer4"); 
 
             GenerateDungeon();
         }
@@ -249,6 +246,30 @@ namespace Jellymancer.GameParts
                     iy = random.Next(0, Height);
                 }
                 AddActor(new Critter(monsterSprites["rat"], ix, iy, random));
+            }
+
+            // Add Monsters
+            for (var i = 0; i < (Width * Height) / 200; ++i)
+            {
+                var ix = 0;
+                var iy = 0;
+                while (!map[ix, iy].walkable)
+                {
+                    ix = random.Next(0, Width);
+                    iy = random.Next(0, Height);
+                }
+                switch (random.Next(0, 3))
+                {
+                    case 0:
+                        AddActor(new BasicEnemy(monsterSprites["adventurer3"], ix, iy));
+                        break;
+                    case 1:
+                        AddActor(new BasicEnemy(monsterSprites["adventurer4"], ix, iy));
+                        break;
+                    case 2:
+                        AddActor(new BasicEnemy(monsterSprites["adventurer5"], ix, iy));
+                        break;
+                }
             }
 
             UpdatePathGrid();

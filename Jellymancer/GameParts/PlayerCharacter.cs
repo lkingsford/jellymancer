@@ -116,7 +116,7 @@ namespace Jellymancer.GameParts
                 }
                 else
                 {
-                    foreach(var tokill in markedVisitBitsList.Where(i => !i.visited && i.actor != this))
+                    foreach(var tokill in markedVisitBitsList.Where(i => !i.visited && i.actor != this && !i.actor.dead))
                     {
                         tokill.actor.Choke();
                     }
@@ -261,6 +261,15 @@ namespace Jellymancer.GameParts
                     }
                 }
             }
+        }
+
+        public void eatSelf(JellyBit i)
+        {
+            i.dead = true;
+            characterParts.Remove(i);
+            ExplodeAndPullIn();
+            hp += 1;
+            if (hp > 4) { hp = 4; }
         }
 
 

@@ -26,13 +26,20 @@ namespace Jellymancer.GameParts
 
         public override void MoveTowards(int x, int y)
         {
-            var path = new DeenGames.Utils.AStarPathFinder.PathFinderFast(currentMap.pathGrid).FindPath(new DeenGames.Utils.Point(this.x, this.y), new DeenGames.Utils.Point(x, y));
-            if (path != null && path.Count > 2)
+            try
             {
-                var pathPos = (path[path.Count - 2]);
-                base.MoveTowards(path[path.Count - 2].X, path[path.Count - 2].Y);
+                var path = new DeenGames.Utils.AStarPathFinder.PathFinderFast(currentMap.pathGrid).FindPath(new DeenGames.Utils.Point(this.x, this.y), new DeenGames.Utils.Point(x, y));
+                if (path != null && path.Count > 2)
+                {
+                    var pathPos = (path[path.Count - 2]);
+                    base.MoveTowards(path[path.Count - 2].X, path[path.Count - 2].Y);
+                }
+                else
+                {
+                    base.MoveTowards(x, y);
+                }
             }
-            else
+            catch (IndexOutOfRangeException)
             {
                 base.MoveTowards(x, y);
             }

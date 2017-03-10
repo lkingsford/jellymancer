@@ -159,9 +159,11 @@ namespace Jellymancer
             // Base needs to be called first to get pressed
             base.Update(gametime);
 
+            bool acted = false; 
+
             if (mousePress[LEFT_BUTTON])
             {
-                foreach(var i in currentMap.Actors)
+                foreach (var i in currentMap.Actors)
                 {
                     i.lastTurnX = i.x;
                     i.lastTurnY = i.y;
@@ -172,7 +174,26 @@ namespace Jellymancer
                 var tileOverY = (mouseState.Y - Y_OFFSET) / TILE_HEIGHT + camera_y;
                 pc.MoveTowards(tileOverX, tileOverY);
                 timeSince = 0;
+                acted = true;
+            }
 
+            if (mousePress[RIGHT_BUTTON])
+            {
+                var mouseState = Mouse.GetState();
+                var tileOverX = (mouseState.X - X_OFFSET) / TILE_WIDTH + camera_x;
+                var tileOverY = (mouseState.Y - Y_OFFSET) / TILE_HEIGHT + camera_y;
+                var a = currentMap.Actors.FirstOrDefault(i => (i.x == tileOverX) && (i.y == tileOverY));
+                if (a != null && a.parent == pc)
+                {
+                    acted = true;
+                    a.dead = true;
+                    pc.eatSelf((JellyBit)a);
+                }
+            }
+
+            // If any move made
+            if (acted)
+            { 
                 // Do choking
                 //   To prevent changing in foreach
                 var actorsBeforeChoke = new List<Actor>(currentMap.Actors);
@@ -252,8 +273,8 @@ namespace Jellymancer
                 currentMap.KillDeadActors();
                 
 
-                // Move all the baddies
-                foreach(var i in currentMap.Actors)
+                // Move all the baddies that are kinda close
+                foreach(var i in currentMap.Actors.Where(i=>(Math.Abs(i.x - pc.x) < 20) && (Math.Abs(i.y - pc.y) < 20)))
                 {
                     i.Act();
                 }
