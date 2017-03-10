@@ -100,9 +100,13 @@ namespace Jellymancer.GameParts
         public virtual void Choke()
         {
             dead = true;
-            foreach(var i in this.characterParts)
+            foreach(var i in this.characterParts.ToList())
             {
                 i.Choke();
+            }
+            if (parent?.characterParts.Contains(this) ?? false)
+            {
+                parent.characterParts.Remove(this);
             }
         }
 
@@ -133,6 +137,7 @@ namespace Jellymancer.GameParts
 
         public virtual void Act()
         {
+            characterParts.RemoveAll(i => i.dead);
         }
     }
 }

@@ -164,11 +164,18 @@ namespace Jellymancer.GameParts
             // Use pathfinding to move towards mouse click
             try
             {
-                var path = new DeenGames.Utils.AStarPathFinder.PathFinderFast(currentMap.pathGrid).FindPath(new DeenGames.Utils.Point(this.x, this.y), new DeenGames.Utils.Point(x, y));
-                if (path != null && path.Count > 2)
+                if (depth != 0)
                 {
-                    var pathPos = (path[path.Count - 2]);
-                    base.MoveTowards(path[path.Count - 2].X, path[path.Count - 2].Y);
+                    var path = new DeenGames.Utils.AStarPathFinder.PathFinderFast(currentMap.pathGrid).FindPath(new DeenGames.Utils.Point(this.x, this.y), new DeenGames.Utils.Point(x, y));
+                    if (path != null && path.Count > 2)
+                    {
+                        var pathPos = (path[path.Count - 2]);
+                        base.MoveTowards(path[path.Count - 2].X, path[path.Count - 2].Y);
+                    }
+                    else
+                    {
+                        base.MoveTowards(x, y);
+                    }
                 }
                 else
                 {
@@ -236,48 +243,60 @@ namespace Jellymancer.GameParts
         private Tuple<int, int> FindClear(int x, int y, Actor target)
         {
             var r = 0;
-            var toExamine = new List<Tuple<int, int>>();
+            var toExamine = new System.Collections.Concurrent.ConcurrentBag<Tuple<int, int>>();
+
+           
             // Keep going till found
             while (true)
             {
+                var items = new List<Tuple<int, int>>();
                 for (var ix = x - r; ix <= x + r; ++ix)
                 {
                     for (var iy = y - r; iy <= y + r; ++iy)
                     {
-                        // If in bounds
-                        if ((ix < 0 || iy < 0 || ix >= currentMap.Width || iy >= currentMap.Height)) { continue; }
-
-                        // Check if walkable
-                        if (!currentMap.map[ix, iy].walkable) { continue; }
-
-                        // If both, check if monsters on it
-                        if (currentMap.Actors.Any(i => i != target && i.x == ix && i.y == iy && !i.dead)) { continue; }
-
-                        // Check if borders another part in a cardinal direction
-                        bool borders = characterParts.Any(i => (i.x == ix + 1 && i.y == iy) ||
-                                                               (i.x == ix - 1 && i.y == iy) ||
-                                                               (i.x == ix && i.y + 1 == iy) ||
-                                                               (i.x == ix && i.y - 1 == iy));
-
-                        // Check if immediately borders parent - in case not above
-                        bool bordersParent = ((ix == this.x - 1 && iy == this.y) ||
-                                              (ix == this.x + 1 && iy == this.y) ||
-                                              (ix == this.x && iy == this.y - 1) ||
-                                              (ix == this.x && iy == this.y + 1));
-
-                        // Has to border a bit
-                        if (!(borders || bordersParent)) { continue; }
-
-                        // Got a candidate
-                        toExamine.Add(new Tuple<int, int>(ix, iy));
+                        items.Add(new Tuple<int, int>(ix, iy));
                     }
                 }
+
+                Parallel.ForEach(items, j =>
+                {
+                    var ix = j.Item1;
+                    var iy = j.Item2;
+                   
+                    // If in bounds
+                    if ((ix < 0 || iy < 0 || ix >= currentMap.Width || iy >= currentMap.Height)) { return; }
+
+                    // Check if walkable
+                    if (!currentMap.map[ix, iy].walkable) { return; }
+
+                    // If both, check if monsters on it
+                    if (currentMap.Actors.Any(i => i != target && i.x == ix && i.y == iy && !i.dead)) { return; }
+
+                    // Check if borders another part in a cardinal direction
+                    bool borders = characterParts.Any(i => (i.x == ix + 1 && i.y == iy) ||
+                                                           (i.x == ix - 1 && i.y == iy) ||
+                                                           (i.x == ix && i.y + 1 == iy) ||
+                                                           (i.x == ix && i.y - 1 == iy));
+
+                    // Check if immediately borders parent - in case not above
+                    bool bordersParent = ((ix == this.x - 1 && iy == this.y) ||
+                                          (ix == this.x + 1 && iy == this.y) ||
+                                          (ix == this.x && iy == this.y - 1) ||
+                                          (ix == this.x && iy == this.y + 1));
+
+                    // Has to border a bit
+                    if (!(borders || bordersParent)) { return; }
+
+                    // Got a candidate
+                    toExamine.Add(new Tuple<int, int>(ix, iy));
+            
+                }); 
 
                 if (toExamine.Count > 0)
                 {
                     // Got one 
                     // Randomize order so not to always bias
-                    var randomizedOrder = toExamine.OrderBy(i => rng.Next());
+                    var randomizedOrder = toExamine.OrderBy(i => rng.Next()).Where(i => i != null);
                     // And get the lowers
                     var bitsByFarAway = randomizedOrder.OrderBy(i => Math.Sqrt(Math.Pow((i.Item1 - x), 2) + Math.Pow((i.Item2 - y), 2)));
                     foreach (var i in bitsByFarAway)
