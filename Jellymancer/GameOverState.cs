@@ -26,13 +26,13 @@ namespace Jellymancer
 
         public override void Draw(GameTime gametime)
         {
-            base.Update(gametime);
             spriteBatch.GraphicsDevice.Clear(Color.White);
             spriteBatch.Begin();
             spriteBatch.Draw(gameOverTitle,
                              new Vector2((1280 - gameOverTitle.Width) / 2, 100),
                              Color.White);
             spriteBatch.End();
+            base.Update(gametime);
         }
 
         public override void Update(GameTime gametime)

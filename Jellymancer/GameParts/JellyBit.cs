@@ -92,11 +92,14 @@ namespace Jellymancer.GameParts
 
         int visitNo = 0;
 
+        public const int MAX_DEPTH = 20;
+
         /// <summary>
         /// Explodes them out, and pulls them back until they touch the core
         /// </summary>
         public void ExplodeAndPullIn(int depth = 0)
         {
+            if (depth > MAX_DEPTH) { return; }
 
             // Sort them by how far away they are from target
             var bitsByFarAway = characterParts.OrderBy(i => Math.Sqrt(Math.Pow((this.x - x), 2) + Math.Pow((this.y - y), 2)));
@@ -284,7 +287,7 @@ namespace Jellymancer.GameParts
                 {
                     // If too big, return
                     ++r;
-                    if (r > Math.Max(currentMap.Width / 2, currentMap.Height / 2))
+                    if (r > 30)
                     {
                         return null;
                     }

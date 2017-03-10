@@ -296,7 +296,6 @@ namespace Jellymancer
                                         if (currentMap.map[ix, iy].walkable)
                                         {
                                             surrounded = false;
-                                            continue;
                                         }
                                     }
                                     else

@@ -17,7 +17,7 @@ namespace Jellymancer.GameParts
             {
                 Grow(x, y);
             }
-            ExplodeAndPullIn();
+            ExplodeAndPullIn(MAX_DEPTH - 2);
         }
 
         public override void Act()
@@ -25,7 +25,7 @@ namespace Jellymancer.GameParts
             // Find the PC
             var pc = currentMap.Actors.First(i => i.GetType() == typeof(PlayerCharacter));
 
-            //MoveTowards(pc);
+            MoveTowards(pc);
         }
 
         public override void Choke()

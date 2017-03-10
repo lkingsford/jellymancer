@@ -76,11 +76,6 @@ namespace Jellymancer.GameParts
             monsterSprites["Jelly4"] = content.Load<Texture2D>("Game/Sprites/Jelly4");
 
             GenerateDungeon();
-            //startX = 20;
-            //startY = 20;
-
-            //AddActor(new JellyEnemy(monsterSprites["Jelly1"], monsterSprites["Jelly1"], startX + 5, startY + 5, 4, random, this));
-
         }
 
         public MapTile[,] map;
@@ -279,6 +274,20 @@ namespace Jellymancer.GameParts
                         AddActor(new BasicEnemy(monsterSprites["adventurer5"], ix, iy));
                         break;
                 }
+            }
+
+            // Add some jellys
+            for (var i = 0; i < 10; ++i)
+            {
+                var ix = 0;
+                var iy = 0;
+                while (!map[ix, iy].walkable)
+                {
+                    ix = random.Next(0, Width);
+                    iy = random.Next(0, Height);
+                }
+                Texture2D sprite = monsterSprites[$"Jelly{random.Next(1, 5)}"];
+                AddActor(new JellyEnemy(sprite, sprite, ix, iy, random.Next(2, 5), random, this));
             }
 
             UpdatePathGrid();
