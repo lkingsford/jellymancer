@@ -214,8 +214,11 @@ namespace Jellymancer
                     if (neighboursOccupied >= 8)
                     {
                         i.Choke();
-                        var chokedByDude = chokedBy.OrderByDescending(j => j.Value);
-                        chokedByDude.First().Key.Killed(i);
+                        if (chokedBy.Count > 0)
+                        {
+                            var chokedByDude = chokedBy.OrderByDescending(j => j.Value);
+                            chokedByDude.First().Key.Killed(i);
+                        }
                     }
                 }
 

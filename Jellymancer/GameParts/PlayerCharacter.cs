@@ -45,7 +45,7 @@ namespace Jellymancer.GameParts
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public new bool MoveTowards(int x, int y)
+        public new bool MoveTowards(int x, int y, int depth = 0)
         {
             // If x, y is inside the blob - then get closer to core
             // if x, y is outside the blob, move blob in dir 
@@ -64,7 +64,7 @@ namespace Jellymancer.GameParts
                 ic.MoveTowards(x, y);
             }
 
-            ExplodeAndPullIn();
+            ExplodeAndPullIn(depth);
 
             return true;
         }
@@ -72,7 +72,7 @@ namespace Jellymancer.GameParts
         /// <summary>
         /// Explodes them out, and pulls them back until they touch the core
         /// </summary>
-        private void ExplodeAndPullIn()
+        private void ExplodeAndPullIn(int depth = 0)
         {
 
             // Sort them by how far away they are from target
@@ -93,14 +93,21 @@ namespace Jellymancer.GameParts
             bool notStuckProperly;
             do
             {
-                var markedVisitBitsList = characterParts.Select(i => new Tuple<bool, JellyBit>(false, (JellyBit)i)).ToList();
-                markedVisitBitsList.Add(new Tuple<bool, JellyBit>(true, this));
+                var markedVisitBitsList = characterParts.Select(i => new VisitEntry(false, (JellyBit)i)).ToList();
+                markedVisitBitsList.Add(new VisitEntry(true, this));
                 visit(this, markedVisitBitsList);
-                markedVisitBitsList.RemoveAll(i => i.Item2 == this);
-                notStuckProperly = markedVisitBitsList.Any(i => !i.Item1);
-                if (notStuckProperly)
+                markedVisitBitsList.RemoveAll(i => i.actor == this);
+                notStuckProperly = markedVisitBitsList.Any(i => !i.visited);
+                if (notStuckProperly && depth < 20)
                 {
-                    MoveTowards(this.x, this.y);
+                    MoveTowards(this.x, this.y, depth + 1);
+                }
+                else
+                {
+                    foreach(var tokill in markedVisitBitsList.Where(i => !i.visited && i.actor != this))
+                    {
+                        tokill.actor.Choke();
+                    }
                 }
             }
             while (notStuckProperly && visitNo < 100);
@@ -121,6 +128,19 @@ namespace Jellymancer.GameParts
 
         }
 
+        class VisitEntry
+        {
+            public Actor actor;
+            public bool visited;
+
+            public VisitEntry(bool visited, Actor a)
+            {
+                actor = a;
+                this.visited = visited;
+            }
+
+        }
+
         int visitNo = 0;
 
         /// <summary>
@@ -129,23 +149,22 @@ namespace Jellymancer.GameParts
         /// <param name="a"></param>
         /// <param name="visitList"></param>
         /// <returns></returns>
-        private void visit(Actor a, List<Tuple<bool, JellyBit>> visitList)
+        private void visit(Actor a, List<VisitEntry> visitList)
         {
             visitNo += 1;
 
-            var me = visitList.First(i => i.Item2 == a);
-            if (me.Item1 && a != this) { return; }
-            visitList.Remove(me);
-            visitList.Add(new Tuple<bool, JellyBit>(true, me.Item2));
+            var me = visitList.First(i => i.actor == a);
+            if (me.visited && a != this) { return; }
+            me.visited = true;
 
-            var neighbours = visitList.Where(i => ((i.Item2.x + 1 == a.x) && (i.Item2.y == a.y)) ||
-                                                 ((i.Item2.x - 1 == a.x) && (i.Item2.y == a.y)) ||
-                                                 ((i.Item2.y + 1 == a.y) && (i.Item2.x == a.x)) ||
-                                                 ((i.Item2.y - 1 == a.y) && (i.Item2.x == a.x))).ToList();
+            var neighbours = visitList.Where(i => ((i.actor.x + 1 == a.x) && (i.actor.y == a.y)) ||
+                                                 ((i.actor.x - 1 == a.x) && (i.actor.y == a.y)) ||
+                                                 ((i.actor.y + 1 == a.y) && (i.actor.x == a.x)) ||
+                                                 ((i.actor.y - 1 == a.y) && (i.actor.x == a.x))).ToList();
 
             for (int i = 0; i < neighbours.Count(); ++i)
             {
-                visit(neighbours[i].Item2, visitList);
+                visit(neighbours[i].actor, visitList);
             }
         }
 
