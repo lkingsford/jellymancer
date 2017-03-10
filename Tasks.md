@@ -17,7 +17,7 @@
 	- [x] Detect choking
 	- [x] Grow on eating dudes
 - [ ] **Dungeon building 101**
-	- [ ] Scrolling map
+	- [x] Scrolling map
 	- [ ] Basic dungeon generation
 	- [ ] Basic single tile enemy
 		- [ ] Pathfinding 😒

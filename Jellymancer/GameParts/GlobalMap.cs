@@ -25,7 +25,7 @@ namespace Jellymancer.GameParts
         /// <returns></returns>
         public MapChunk GetChunk(int chunkX, int chunkY)
         {
-            return new MapChunk(20, 20, content);
+            return new MapChunk(60, 200, content);
         }
 
         /// <summary>

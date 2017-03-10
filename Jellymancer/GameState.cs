@@ -50,13 +50,23 @@ namespace Jellymancer
         }
 
 
-        const int WIDTH = 32;
-        const int HEIGHT = 32;
+        // Tile dimesons in pixels
+        const int TILE_WIDTH = 32;
+        const int TILE_HEIGHT = 32;
+        // Offset of where to show pixels
         const int X_OFFSET = 320;
         const int Y_OFFSET = 32;
+        // Amount of tiles to show
+        const int PLAYFIELD_WIDTH = 20;
+        const int PLAYFIELD_HEIGHT = 20;
 
         double timeSince = 0.0f;
         const double ANIMATION_TIME = 0.3f;
+
+        int camera_x = 0;
+        int camera_y = 0;
+        int last_camera_x = 0;
+        int last_camera_y = 0;
 
         /// <summary>
         /// Draw game to the screen
@@ -66,13 +76,26 @@ namespace Jellymancer
         {
             spriteBatch.Begin();
 
+            // Move camera to have Jelly roughly in middle
+            var currentCameraX = camera_x;
+            var currentCameraY = camera_y;
+            camera_x = Math.Min(Math.Max(pc.x - PLAYFIELD_WIDTH / 2, 0), currentMap.Width - PLAYFIELD_WIDTH);
+            camera_y = Math.Min(Math.Max(pc.y - PLAYFIELD_HEIGHT / 2, 0), currentMap.Height - PLAYFIELD_HEIGHT);
+            if (currentCameraX != camera_x || currentCameraY != camera_y)
+            {
+                last_camera_x = currentCameraX;
+                last_camera_y = currentCameraY;
+            }
 
             // Draw Tiles
-            for (var ix = 0; ix < currentMap.Width; ++ix)
+            for (var ix = camera_x; (ix < currentMap.Width) && (ix <= camera_x + PLAYFIELD_WIDTH) ; ++ix)
             {
-                for (var iy = 0; iy < currentMap.Height; ++iy)
+                for (var iy = camera_y; (iy < currentMap.Height) && (iy <= camera_y + PLAYFIELD_HEIGHT); ++iy)
                 {
-                    spriteBatch.Draw(currentMap.map[ix, iy].img, new Vector2(ix * WIDTH + X_OFFSET, iy * HEIGHT + Y_OFFSET), Color.White);
+                    spriteBatch.Draw(currentMap.map[ix, iy].img,
+                                     new Vector2((ix - camera_x) * TILE_WIDTH + X_OFFSET,
+                                                 (iy - camera_y) * TILE_HEIGHT + Y_OFFSET),
+                                     Color.White);
                 }
             }
 
@@ -84,27 +107,17 @@ namespace Jellymancer
                 var timeRatio = Math.Min(1, timeSince / ANIMATION_TIME);
                 double x = i.x * timeRatio + i.lastTurnX * (1.0 - timeRatio);
                 double y = i.y * timeRatio + i.lastTurnY * (1.0 - timeRatio);
-                spriteBatch.Draw(i.sprite, new Vector2((int)(x * WIDTH + X_OFFSET), (int)(y * HEIGHT + Y_OFFSET)), Color.White);
+                if ((x > camera_x) && 
+                    (x < (camera_x + PLAYFIELD_WIDTH)) && 
+                    (y > camera_y) && 
+                    (y <(camera_y + PLAYFIELD_HEIGHT)))
+                {
+                    spriteBatch.Draw(i.sprite,
+                                     new Vector2((int)((x - camera_x) * TILE_WIDTH + X_OFFSET),
+                                                 (int)((y - camera_y) * TILE_HEIGHT + Y_OFFSET)),
+                                     Color.White);
+                }
             }
-
-            // Draw debug data - mouse position 
-            var mouseState = Mouse.GetState();
-            var tileOverX = (mouseState.X - X_OFFSET) / WIDTH;
-            var tileOverY = (mouseState.Y - Y_OFFSET) / HEIGHT;
-            spriteBatch.DrawString(content.Load<SpriteFont>("Game/Fonts/Debug"),
-                                       string.Format("{0},{1}",tileOverX, tileOverY),
-                                       new Vector2(100, 100),
-                                       Color.Yellow
-                                       );
-
-            // Draw debug data - mouse position distance from dude
-            var dist = Math.Sqrt(Math.Pow((tileOverX - pc.x), 2) + Math.Pow((tileOverY - pc.y), 2));
-            spriteBatch.DrawString(content.Load<SpriteFont>("Game/Fonts/Debug"),
-                                       dist.ToString(),
-                                       new Vector2(100, 130),
-                                       Color.Yellow
-                                       );
-
 
             spriteBatch.End();
             base.Draw(gameTime);
@@ -144,8 +157,8 @@ namespace Jellymancer
                 }
 
                 var mouseState = Mouse.GetState();
-                var tileOverX = (mouseState.X - X_OFFSET) / WIDTH;
-                var tileOverY = (mouseState.Y - Y_OFFSET) / HEIGHT;
+                var tileOverX = (mouseState.X - X_OFFSET) / TILE_WIDTH + camera_x;
+                var tileOverY = (mouseState.Y - Y_OFFSET) / TILE_HEIGHT + camera_y;
                 pc.MoveTowards(tileOverX, tileOverY);
                 timeSince = 0;
 
