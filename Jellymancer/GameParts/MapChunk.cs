@@ -212,10 +212,30 @@ namespace Jellymancer.GameParts
 
             startX = (startRoom.Column + startRoom.Right) / 2;
             startY = (startRoom.Row + startRoom.Bottom) / 2;
+
+            UpdatePathGrid();
         }
 
         public int startX, startY;
-    }
 
+        public byte[,] pathGrid;
+        public void UpdatePathGrid()
+        {
+            int width = DeenGames.Utils.AStarPathFinder.PathFinderHelper.RoundToNearestPowerOfTwo(Width);
+            int height = DeenGames.Utils.AStarPathFinder.PathFinderHelper.RoundToNearestPowerOfTwo(Height);
+
+            pathGrid = new byte[width, height];
+
+            for (var ix = 1; ix < (generatedMap.Width - 2); ++ix)
+            {
+                for (var iy = 1; iy < (generatedMap.Height - 2); ++iy)
+                {
+                    pathGrid[ix, iy] = (byte)(map[ix, iy].walkable ?
+                        DeenGames.Utils.AStarPathFinder.PathFinderHelper.EMPTY_TILE :
+                        DeenGames.Utils.AStarPathFinder.PathFinderHelper.BLOCKED_TILE);
+                }
+            }
+        }
+    }
 }
 

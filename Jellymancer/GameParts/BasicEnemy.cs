@@ -1,5 +1,4 @@
-﻿using Jellymancer.Helper;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,23 +26,15 @@ namespace Jellymancer.GameParts
 
         public override void MoveTowards(int x, int y)
         {
-            var path = UglyPath.GetPath(new Helper.UglyPath.coord(this.x, this.y),
-                                        new Helper.UglyPath.coord(x, y),
-                                        CheckCollision);
+            var path = new DeenGames.Utils.AStarPathFinder.PathFinderFast(currentMap.pathGrid).FindPath(new DeenGames.Utils.Point(this.x, this.y), new DeenGames.Utils.Point(x, y));
             if (path != null)
             {
-                base.MoveTowards(path.First().X, path.First().Y);
+                base.MoveTowards(path[path.Count - 2].X, path[path.Count - 2].Y);
             }
             else
             {
                 base.MoveTowards(x, y);
             }
-        }
-
-        private bool CheckCollision(int x, int y)
-        {
-            if (x < 0 || y < 0 || x >= currentMap.Width || y >= currentMap.Height) { return false; }
-            return currentMap.map[x, y].walkable; // && currentMap.Actors.Any(i => (i.x == x) && (i.y == y));
         }
     }
 }

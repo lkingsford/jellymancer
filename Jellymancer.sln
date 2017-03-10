@@ -15,15 +15,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug - Any CPU|Any CPU = Debug - Any CPU|Any CPU
 		Debug - Any CPU|x86 = Debug - Any CPU|x86
+		Debug|Any CPU = Debug|Any CPU
 		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{539A8230-B137-4FED-BA98-65261301D47E}.Debug - Any CPU|Any CPU.ActiveCfg = Debug|x86
+		{539A8230-B137-4FED-BA98-65261301D47E}.Debug - Any CPU|Any CPU.Build.0 = Debug|x86
 		{539A8230-B137-4FED-BA98-65261301D47E}.Debug - Any CPU|x86.ActiveCfg = Release|x86
 		{539A8230-B137-4FED-BA98-65261301D47E}.Debug - Any CPU|x86.Build.0 = Release|x86
+		{539A8230-B137-4FED-BA98-65261301D47E}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{539A8230-B137-4FED-BA98-65261301D47E}.Debug|x86.ActiveCfg = Debug|x86
 		{539A8230-B137-4FED-BA98-65261301D47E}.Debug|x86.Build.0 = Debug|x86
+		{539A8230-B137-4FED-BA98-65261301D47E}.Release|Any CPU.ActiveCfg = Release|x86
 		{539A8230-B137-4FED-BA98-65261301D47E}.Release|x86.ActiveCfg = Release|x86
 		{539A8230-B137-4FED-BA98-65261301D47E}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
