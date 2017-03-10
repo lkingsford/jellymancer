@@ -16,11 +16,11 @@
 	- [x] Allow more jelly-ish movement
 	- [x] Detect choking
 	- [x] Grow on eating dudes
-- [ ] **Dungeon building 101**
+- [x] **Dungeon building 101**
 	- [x] Scrolling map
 	- [x] Basic dungeon generation
-	- [ ] Basic single tile enemy
-		- [ ] Pathfinding 😒
+	- [x] Basic single tile enemy
+		- [x] Pathfinding 😒
 - [ ] **Dungeon building 102**
 	- [ ] Basic jelly enemy
 	- [ ] Bigger jelly enemy as win condition
