@@ -57,11 +57,11 @@ namespace Jellymancer.GameParts
             Width = width;
             Height = height;
 
-            AddActor(new GameParts.Actor(content.Load<Texture2D>("Game/Sprites/Adventurer1"), 10, 10));
-            AddActor(new GameParts.Actor(content.Load<Texture2D>("Game/Sprites/Adventurer2"), 15, 10));
-            AddActor(new GameParts.Actor(content.Load<Texture2D>("Game/Sprites/Adventurer3"), 5, 10));
-            AddActor(new GameParts.Actor(content.Load<Texture2D>("Game/Sprites/Adventurer4"), 5, 5));
-            AddActor(new GameParts.Actor(content.Load<Texture2D>("Game/Sprites/Adventurer5"), 15, 5));
+            AddActor(new GameParts.BasicEnemy(content.Load<Texture2D>("Game/Sprites/Adventurer1"), 10, 10));
+            AddActor(new GameParts.BasicEnemy(content.Load<Texture2D>("Game/Sprites/Adventurer2"), 15, 10));
+            AddActor(new GameParts.BasicEnemy(content.Load<Texture2D>("Game/Sprites/Adventurer3"), 5, 10));
+            AddActor(new GameParts.BasicEnemy(content.Load<Texture2D>("Game/Sprites/Adventurer4"), 5, 5));
+            AddActor(new GameParts.BasicEnemy(content.Load<Texture2D>("Game/Sprites/Adventurer5"), 15, 5));
 
             GenerateDungeon();
         }
@@ -126,15 +126,6 @@ namespace Jellymancer.GameParts
         /// </summary>
         public void GenerateDungeon()
         {
-            // Fill with nothing
-            for (var ix = 0; ix < this.Width; ++ix)
-            {
-                for (var iy = 0; iy < this.Height; ++iy)
-                {
-                    map[ix, iy] = nothing;
-                }
-            }
-
             var generator = new Karcero.Engine.DungeonGenerator<Karcero.Engine.Models.Cell>();
 
             generatedMap = generator.GenerateA()
@@ -203,6 +194,18 @@ namespace Jellymancer.GameParts
                         map[ix, iy] = nothing;
                     }
                 }
+            }
+
+            // Fill Outside with Wall
+            for (var ix = 0; ix < Width; ++ix)
+            {
+                map[ix, 0] = wall;
+                map[ix, Height - 1] = wall;
+            }
+            for (var iy = 0; iy < Height; ++iy)
+            {
+                map[0, iy] = wall;
+                map[Width - 1, iy] = wall;
             }
 
             var startRoom = generatedMap.Rooms.OrderBy(i => i.Row).First();

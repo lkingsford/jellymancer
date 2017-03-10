@@ -99,5 +99,22 @@ namespace Jellymancer.GameParts
         public virtual void Killed(Actor i)
         {
         }
+
+        /// <summary>
+        /// Move towards the given point
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public virtual void MoveTowards(int x, int y)
+        {
+            int dx = Math.Sign(this.x - x) * -1;
+            int dy = Math.Sign(this.y - y) * -1;
+            Move(dx, dy);
+        }
+
+        public void MoveTowards(Actor a)
+        {
+            MoveTowards(a.x, a.y);
+        }
     }
 }

@@ -55,11 +55,11 @@ namespace Jellymancer
         const int TILE_WIDTH = 32;
         const int TILE_HEIGHT = 32;
         // Offset of where to show pixels
-        const int X_OFFSET = 320;
-        const int Y_OFFSET = 32;
+        const int X_OFFSET = 0;
+        const int Y_OFFSET = 16;
         // Amount of tiles to show
-        const int PLAYFIELD_WIDTH = 20;
-        const int PLAYFIELD_HEIGHT = 20;
+        const int PLAYFIELD_WIDTH = 40;
+        const int PLAYFIELD_HEIGHT = 22;
 
         double timeSince = 0.0f;
         const double ANIMATION_TIME = 0.3f;
@@ -225,6 +225,12 @@ namespace Jellymancer
 
                 // Kill deads
                 currentMap.KillDeadActors();
+
+                // Move all the baddies
+                foreach(var i in currentMap.Actors.Where(j=>j.GetType()==typeof(BasicEnemy)))
+                {
+                    ((BasicEnemy)i).Act();
+                }
             }
 
         }
