@@ -130,7 +130,6 @@ namespace Jellymancer
             // Draw health
             spriteBatch.Draw(healthui[pc.hp], new Vector2(50, 50), Color.White);
 
-
             spriteBatch.End();
             base.Draw(gameTime);
         }
@@ -223,13 +222,28 @@ namespace Jellymancer
                         }
                     }
 
-                    if (neighboursOccupied >= 8)
+                    if (i.foodOnly)
                     {
-                        i.Choke();
-                        if (chokedBy.Count > 0)
+                        if (neighboursOccupied >= 1)
                         {
-                            var chokedByDude = chokedBy.OrderByDescending(j => j.Value);
-                            chokedByDude.First().Key.Killed(i);
+                            if (chokedBy.Count > 0)
+                            { 
+                                i.Choke();
+                                var chokedByDude = chokedBy.OrderByDescending(j => j.Value);
+                                chokedByDude.First().Key.Killed(i);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (neighboursOccupied >= 8)
+                        {
+                            if (chokedBy.Count > 0)
+                            {
+                                i.Choke();
+                                var chokedByDude = chokedBy.OrderByDescending(j => j.Value);
+                                chokedByDude.First().Key.Killed(i);
+                            }
                         }
                     }
                 }

@@ -17,6 +17,10 @@ namespace Jellymancer.GameParts
     {
         private MapTile floor, wall, nothing;
 
+        private Dictionary<string, Texture2D> monsterSprites = new Dictionary<string, Texture2D>();
+
+        public Random random;
+
         /// <summary>
         /// Create new map chunk
         /// </summary>
@@ -54,6 +58,8 @@ namespace Jellymancer.GameParts
                 map[width - 1, iy] = wall;
             }
 
+            random = new Random();
+
             Width = width;
             Height = height;
 
@@ -62,6 +68,10 @@ namespace Jellymancer.GameParts
             AddActor(new GameParts.BasicEnemy(content.Load<Texture2D>("Game/Sprites/Adventurer3"), 5, 10));
             AddActor(new GameParts.BasicEnemy(content.Load<Texture2D>("Game/Sprites/Adventurer4"), 5, 5));
             AddActor(new GameParts.BasicEnemy(content.Load<Texture2D>("Game/Sprites/Adventurer5"), 15, 5));
+
+            monsterSprites["meat1"] = content.Load<Texture2D>("Game/Sprites/Meat1");
+            monsterSprites["meat2"] = content.Load<Texture2D>("Game/Sprites/Meat2");
+            monsterSprites["meat3"] = content.Load<Texture2D>("Game/Sprites/Meat3");
 
             GenerateDungeon();
         }
@@ -139,11 +149,11 @@ namespace Jellymancer.GameParts
 
             for (var ix = 0; ix < (generatedMap.Width - 1); ++ix)
             {
-                for (var iy = 0; iy < (generatedMap.Height - 1) ; ++iy)
+                for (var iy = 0; iy < (generatedMap.Height - 1); ++iy)
                 {
                     // Row, Column . Urgh.
                     var c = generatedMap.GetCell(iy, ix);
-                    switch(c.Terrain)
+                    switch (c.Terrain)
                     {
                         case Karcero.Engine.Models.TerrainType.Rock:
                             map[ix, iy] = wall;
@@ -159,7 +169,7 @@ namespace Jellymancer.GameParts
             // Make corrodors 2 or 3 wide usually
             for (var ix = 2; ix < (generatedMap.Width - 3); ++ix)
             {
-                for (var iy = 2; iy < (generatedMap.Height -3); ++iy)
+                for (var iy = 2; iy < (generatedMap.Height - 3); ++iy)
                 {
                     if (map[ix, iy].walkable && (!map[ix - 1, iy].walkable && !map[ix + 1, iy].walkable && map[ix, iy - 1].walkable && map[ix, iy + 1].walkable))
                     {
@@ -167,7 +177,7 @@ namespace Jellymancer.GameParts
                         map[ix + 1, iy] = floor;
                     }
 
-                    if (map[ix, iy].walkable && (!map[ix, iy - 1].walkable && !map[ix, iy + 1].walkable && map[ix - 1, iy].walkable && map[ix + 1, iy ].walkable))
+                    if (map[ix, iy].walkable && (!map[ix, iy - 1].walkable && !map[ix, iy + 1].walkable && map[ix - 1, iy].walkable && map[ix + 1, iy].walkable))
                     {
                         map[ix, iy - 1] = floor;
                         map[ix, iy + 1] = floor;
@@ -181,15 +191,15 @@ namespace Jellymancer.GameParts
                 for (var iy = 1; iy < (generatedMap.Height - 2); ++iy)
                 {
                     if (!map[ix, iy].walkable &&
-                        !map[ix - 1, iy].walkable && 
-                        !map[ix + 1, iy].walkable && 
+                        !map[ix - 1, iy].walkable &&
+                        !map[ix + 1, iy].walkable &&
                         !map[ix, iy - 1].walkable &&
                         !map[ix, iy + 1].walkable &&
-                        !map[ix + 1, iy+1].walkable &&
-                        !map[ix - 1, iy+1].walkable &&
-                        !map[ix + 1, iy-1].walkable &&
-                        !map[ix + 1, iy-1].walkable &&
-                        !map[ix - 1, iy-1].walkable)
+                        !map[ix + 1, iy + 1].walkable &&
+                        !map[ix - 1, iy + 1].walkable &&
+                        !map[ix + 1, iy - 1].walkable &&
+                        !map[ix + 1, iy - 1].walkable &&
+                        !map[ix - 1, iy - 1].walkable)
                     {
                         map[ix, iy] = nothing;
                     }
@@ -212,6 +222,20 @@ namespace Jellymancer.GameParts
 
             startX = (startRoom.Column + startRoom.Right) / 2;
             startY = (startRoom.Row + startRoom.Bottom) / 2;
+
+            // Add Food
+            for (var i = 0; i < (Width * Height) / 50; ++i)
+            {
+                var ix = 0;
+                var iy = 0;
+                while (!map[ix, iy].walkable)
+                {
+                    ix = random.Next(0, Width);
+                    iy = random.Next(0, Height);
+                }
+                var key = $"meat{random.Next(1, 4)}";
+                AddActor(new Food(monsterSprites[key], ix, iy));
+            }
 
             UpdatePathGrid();
         }

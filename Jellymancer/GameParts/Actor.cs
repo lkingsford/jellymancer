@@ -45,6 +45,11 @@ namespace Jellymancer.GameParts
         public bool choking = false;
 
         /// <summary>
+        /// Whether food only - turn immediately
+        /// </summary>
+        public bool foodOnly = false;
+     
+        /// <summary>
         /// Location which we're on
         /// </summary>
         public MapChunk currentMap = null;
