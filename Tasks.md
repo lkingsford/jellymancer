@@ -18,7 +18,7 @@
 	- [x] Grow on eating dudes
 - [ ] **Dungeon building 101**
 	- [x] Scrolling map
-	- [ ] Basic dungeon generation
+	- [x] Basic dungeon generation
 	- [ ] Basic single tile enemy
 		- [ ] Pathfinding 😒
 - [ ] **Dungeon building 102**

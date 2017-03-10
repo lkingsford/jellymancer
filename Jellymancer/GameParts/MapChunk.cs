@@ -119,6 +119,8 @@ namespace Jellymancer.GameParts
             actors.RemoveAll(i => i.dead);
         }
 
+        public Karcero.Engine.Models.Map<Karcero.Engine.Models.Cell> generatedMap;
+
         /// <summary>
         /// Turn this into a fun lovin' dungeon
         /// </summary>
@@ -135,8 +137,8 @@ namespace Jellymancer.GameParts
 
             var generator = new Karcero.Engine.DungeonGenerator<Karcero.Engine.Models.Cell>();
 
-            var generatedMap = generator.GenerateA()
-                     .MediumDungeon()
+            generatedMap = generator.GenerateA()
+                     .DungeonOfSize(Width, Height)
                      .ABitRandom()
                      .SomewhatSparse()
                      .WithMediumChanceToRemoveDeadEnds()
@@ -144,9 +146,9 @@ namespace Jellymancer.GameParts
                      .WithLargeNumberOfRooms()
                      .Now();
 
-            for (var ix = 0; ix < generatedMap.Width; ++ix)
+            for (var ix = 0; ix < (generatedMap.Width - 1); ++ix)
             {
-                for (var iy = 0; iy < generatedMap.Height ; ++iy)
+                for (var iy = 0; iy < (generatedMap.Height - 1) ; ++iy)
                 {
                     // Row, Column . Urgh.
                     var c = generatedMap.GetCell(iy, ix);
@@ -163,7 +165,54 @@ namespace Jellymancer.GameParts
                 }
             }
 
+            // Make corrodors 2 or 3 wide usually
+            for (var ix = 1; ix < (generatedMap.Width - 2); ++ix)
+            {
+                for (var iy = 1; iy < (generatedMap.Height -2); ++iy)
+                {
+                    if (map[ix, iy].walkable && (!map[ix - 1, iy].walkable && !map[ix + 1, iy].walkable && map[ix, iy - 1].walkable && map[ix, iy + 1].walkable))
+                    {
+                        map[ix - 1, iy] = floor;
+                        map[ix + 1, iy] = floor;
+                    }
+
+                    if (map[ix, iy].walkable && (!map[ix, iy - 1].walkable && !map[ix, iy + 1].walkable && map[ix - 1, iy].walkable && map[ix + 1, iy ].walkable))
+                    {
+                        map[ix, iy - 1] = floor;
+                        map[ix, iy + 1] = floor;
+                    }
+                }
+            }
+
+            // And make surrounded tiles empty
+            for (var ix = 1; ix < (generatedMap.Width - 2); ++ix)
+            {
+                for (var iy = 1; iy < (generatedMap.Height - 2); ++iy)
+                {
+                    if (!map[ix, iy].walkable &&
+                        !map[ix - 1, iy].walkable && 
+                        !map[ix + 1, iy].walkable && 
+                        !map[ix, iy - 1].walkable &&
+                        !map[ix, iy + 1].walkable &&
+                        !map[ix + 1, iy+1].walkable &&
+                        !map[ix - 1, iy+1].walkable &&
+                        !map[ix + 1, iy-1].walkable &&
+                        !map[ix + 1, iy-1].walkable &&
+                        !map[ix - 1, iy-1].walkable)
+                    {
+                        map[ix, iy] = nothing;
+                    }
+                }
+            }
+
+            var startRoom = generatedMap.Rooms.First();
+
+            startX = (startRoom.Column + startRoom.Right) / 2;
+            startY = (startRoom.Row + startRoom.Bottom) / 2;
         }
 
+        public int startX, startY;
     }
+
 }
+

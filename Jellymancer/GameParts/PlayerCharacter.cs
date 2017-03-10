@@ -20,9 +20,9 @@ namespace Jellymancer.GameParts
         {
             this.jellyPartSprite = jellyPartSprite;
 
-            for (var ix = x - 2; ix <= x + 2; ++ix)
+            for (var ix = x - 1; ix <= x + 1; ++ix)
             {
-                for (var iy = x - 2; iy <= y + 2; ++iy)
+                for (var iy = y - 1; iy <= y + 1; ++iy)
                 {
                     if (!(ix == x && iy == y))
                     {
@@ -30,7 +30,6 @@ namespace Jellymancer.GameParts
                     }
                 }
             }
-
             choking = true;
         }
 
@@ -72,7 +71,7 @@ namespace Jellymancer.GameParts
         /// <summary>
         /// Explodes them out, and pulls them back until they touch the core
         /// </summary>
-        private void ExplodeAndPullIn(int depth = 0)
+        public void ExplodeAndPullIn(int depth = 0)
         {
 
             // Sort them by how far away they are from target
