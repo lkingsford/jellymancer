@@ -105,6 +105,11 @@ namespace Jellymancer
                 }
             }
 
+            if (states[states.Count-1].toClose)
+            {
+                states.Add(mainMenu);
+            }
+
             base.Update(gameTime);
         }
 
@@ -125,7 +130,7 @@ namespace Jellymancer
         /// </summary>
         private void StartGame()
         {
-            var game = new GameState(Content);
+            var game = new GameState(Content, states);
             game.LoadContent();
             game.SpriteBatch = spriteBatch;
             game.NewGame();

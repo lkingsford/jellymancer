@@ -41,8 +41,8 @@ namespace Jellymancer
         /// <summary>
         /// Draw the game menu
         /// </summary>
-        /// <param name="gameTime"></param>
-        public override void Draw(GameTime gameTime)
+        /// <param name="gametime"></param>
+        public override void Draw(GameTime gametime)
         {
             spriteBatch.Begin();
             // Using for instead of foreach so to get index
@@ -56,7 +56,7 @@ namespace Jellymancer
             }
             
             spriteBatch.End();
-            base.Draw(gameTime);
+            base.Draw(gametime);
         }
 
         /// <summary>

@@ -20,6 +20,8 @@ namespace Jellymancer
         protected SpriteBatch spriteBatch;
         protected ContentManager content;
 
+        public bool toClose = false;
+
         /// <summary>
         /// The current sprite batch
         /// </summary>

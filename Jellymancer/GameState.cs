@@ -13,10 +13,11 @@ namespace Jellymancer
 {
     class GameState : State
     {
-        public GameState(ContentManager content)
+        public GameState(ContentManager content, List<State> states)
         {
             this.content = content;
             this.globalMap = new GlobalMap(content);
+            this.states = states;
         }
 
         /// <summary>
@@ -35,6 +36,8 @@ namespace Jellymancer
         public PlayerCharacter pc;
 
         public Random rng = new Random();
+
+        public bool gameover = false;
 
         /// <summary>
         /// Start a game
@@ -75,6 +78,7 @@ namespace Jellymancer
         int camera_y = 0;
         int last_camera_x = 0;
         int last_camera_y = 0;
+        private List<State> states;
 
         /// <summary>
         /// Draw game to the screen
@@ -278,8 +282,21 @@ namespace Jellymancer
                 {
                     i.Act();
                 }
+
+                if (pc.dead)
+                {
+                    GameOver();
+                }
+
+                currentMap.KillDeadActors();
             }
 
+        }
+
+        private void GameOver()
+        {
+            states.Remove(this);
+            states.Add(new GameOverState(content));
         }
     }
 }
