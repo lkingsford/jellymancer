@@ -73,7 +73,7 @@ namespace Jellymancer
         const int TILE_HEIGHT = 32;
         // Offset of where to show pixels
         const int X_OFFSET = 0;
-        const int Y_OFFSET = 16;
+        const int Y_OFFSET = 0;
         // Amount of tiles to show
         const int PLAYFIELD_WIDTH = 40;
         const int PLAYFIELD_HEIGHT = 22;
@@ -93,6 +93,8 @@ namespace Jellymancer
         /// <param name="gameTime"></param>
         public override void Draw(GameTime gameTime)
         {
+            spriteBatch.GraphicsDevice.Clear(Color.Black);
+
             spriteBatch.Begin();
 
             // Move camera to have Jelly roughly in middle

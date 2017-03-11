@@ -140,6 +140,11 @@ namespace Jellymancer
             game.NewGame();
             states.Add(game);
 
+            var playing = new HowToPlayState(Content);
+            playing.LoadContent();
+            playing.SpriteBatch = spriteBatch;
+            states.Add(playing);
+
             var intro = new IntroState(Content);
             intro.LoadContent();
             intro.SpriteBatch = spriteBatch;
