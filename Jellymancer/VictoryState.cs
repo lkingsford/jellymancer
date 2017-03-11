@@ -6,14 +6,19 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 
 namespace Jellymancer
 {
     class VictoryState : State
     {
+        Song victorySong;
+
         public VictoryState(ContentManager content)
         {
             this.content = content;
+            victorySong = content.Load<Song>("Victory/VictorySong");
+            MediaPlayer.Play(victorySong);
         }
 
         Texture2D victoryTitle;
@@ -54,6 +59,7 @@ the brethren of its two strong cores.";
             if (mousePress[LEFT_BUTTON])
             {
                 this.toClose = true;
+                MediaPlayer.Stop();
             }
         }
     }

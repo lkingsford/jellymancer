@@ -379,3 +379,39 @@
 /processorParam:TextureFormat=Color
 /build:Playing/Playing.png
 
+#begin GameOver/GameOverMusic.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:GameOver/GameOverMusic.ogg
+
+#begin Victory/VictorySong.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Victory/VictorySong.ogg
+
+#begin Game/Sounds/Glutton1.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Game/Sounds/Glutton1.ogg
+
+#begin Game/Sounds/Glutton2.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Game/Sounds/Glutton2.ogg
+
+#begin Game/Sounds/Glutton3.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Game/Sounds/Glutton3.ogg
+
+#begin Game/Sounds/Glutton4.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Game/Sounds/Glutton4.ogg
+

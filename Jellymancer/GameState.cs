@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Jellymancer
 {
@@ -40,6 +41,7 @@ namespace Jellymancer
         /// </summary>
         public GluttonEnemy badHombre;
 
+
         public Random rng = new Random();
 
         public bool gameover = false;
@@ -64,6 +66,18 @@ namespace Jellymancer
 
             // Find victory dude
             badHombre = (GluttonEnemy)currentMap.Actors.First(i => i.GetType() == typeof(GluttonEnemy));
+
+            gluttonTalks = new SoundEffect[4];
+            gluttonTalks[0] = content.Load<SoundEffect>("Game/Sounds/Glutton1");
+            gluttonTalks[1] = content.Load<SoundEffect>("Game/Sounds/Glutton2");
+            gluttonTalks[2] = content.Load<SoundEffect>("Game/Sounds/Glutton3");
+            gluttonTalks[3] = content.Load<SoundEffect>("Game/Sounds/Glutton4");
+
+            gluttonTalked = new bool[4];
+            gluttonTalked[0] = false;
+            gluttonTalked[1] = false;
+            gluttonTalked[2] = false;
+            gluttonTalked[3] = false;
         }
 
         Texture2D[] healthui;
@@ -351,6 +365,32 @@ namespace Jellymancer
                     i.Act();
                 }
 
+                // Play sounds if necessary
+                if (pc.y > 10 && !gluttonTalked[0])
+                {
+                    gluttonTalks[0].Play();
+                    gluttonTalked[0] = true;
+                }
+
+                if (pc.y > 50 && !gluttonTalked[1])
+                {
+                    gluttonTalks[1].Play();
+                    gluttonTalked[1] = true;
+                }
+
+
+                if (pc.y > 100 && !gluttonTalked[2])
+                {
+                    gluttonTalks[2].Play();
+                    gluttonTalked[2] = true;
+                }
+
+                if (Math.Abs(pc.x - badHombre.x) + Math.Abs(pc.y - badHombre.y) < 20)
+                {
+                    gluttonTalks[3].Play();
+                    gluttonTalked[3] = true;
+                }
+
                 // Check losing and victory condition
                 if (pc.dead)
                 {
@@ -366,6 +406,9 @@ namespace Jellymancer
             }
 
         }
+
+        SoundEffect[] gluttonTalks;
+        bool[] gluttonTalked;
 
         private void GameOver()
         {

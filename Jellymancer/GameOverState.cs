@@ -6,14 +6,19 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 
 namespace Jellymancer
 {
     class GameOverState : State
     {
+        Song gameOverSong;
         public GameOverState(ContentManager content)
         {
             this.content = content;
+            gameOverSong = content.Load<Song>("GameOver/GameOverMusic");
+            MediaPlayer.Play(gameOverSong);
+
         }
 
         Texture2D gameOverTitle;
@@ -41,6 +46,7 @@ namespace Jellymancer
             if (mousePress[LEFT_BUTTON])
             {
                 this.toClose = true;
+                MediaPlayer.Stop();
             }
         }
     }
