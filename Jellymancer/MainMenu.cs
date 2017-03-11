@@ -23,10 +23,12 @@ namespace Jellymancer
         {
             font = content.Load<SpriteFont>("Menu/Body");
             logo = content.Load<Texture2D>("Menu/Logo");
+            authorFont = content.Load<SpriteFont>("Menu/Author");
             base.LoadContent();
         }
 
         SpriteFont font;
+        SpriteFont authorFont;
         Texture2D logo;
 
         List<String> items = new List<String>();
@@ -37,6 +39,17 @@ namespace Jellymancer
         public const int MENU_WIDTH = 300;
         public const int MENU_TOP = 450;
         public const int MENU_LINE_HEIGHT = 60;
+
+        public const string AUTHOR_BLOCK =
+@"
+This game was produced for the 
+Seven Day Roguelike Challenge
+between 10pm 4 March 2017 and
+3:30pm 11 March 2017 by
+Lachlan Kingsford.
+@thelochok
+www.nerdygentleman.com
+";
 
         /// <summary>
         /// Draw the game menu
@@ -52,7 +65,9 @@ namespace Jellymancer
                                        items[i],
                                        new Vector2(MENU_LEFT, MENU_TOP + i * MENU_LINE_HEIGHT),
                                        i == selectedItem ? Color.White : Color.Gray);
+                spriteBatch.DrawString(authorFont, AUTHOR_BLOCK, new Vector2(700, 350), Color.White);
                 spriteBatch.Draw(logo, new Vector2(140, 100), Color.White);
+
             }
             
             spriteBatch.End();

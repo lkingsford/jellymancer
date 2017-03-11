@@ -367,18 +367,6 @@
 /processorParam:TextureFormat=Compressed
 /build:Victory\Story.spritefont
 
-#begin Playing/Playing.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Playing/Playing.png
-
 #begin GameOver/GameOverMusic.ogg
 /importer:OggImporter
 /processor:SongProcessor
@@ -450,4 +438,22 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:Game\BGM\0.ogg
+
+#begin Playing/Playing.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Playing/Playing.png
+
+#begin Menu\Author.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Menu\Author.spritefont
 
