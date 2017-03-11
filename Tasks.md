@@ -21,10 +21,10 @@
 	- [x] Basic dungeon generation
 	- [x] Basic single tile enemy
 		- [x] Pathfinding 😒
-- [ ] **Dungeon building 102**
+- [x] **Dungeon building 102**
 	- [x] Basic jelly enemy
 	- [x] Bigger jelly enemy as win condition
-	- [ ] Display text on winning
+	- [x] Display text on winning
 - [ ] **World building**
 	- [ ] Macro tile-chunk allocation
 	- [ ] Generate tile-chunk as map on loading

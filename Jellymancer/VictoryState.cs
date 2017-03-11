@@ -21,11 +21,11 @@ namespace Jellymancer
         // We're word wrapping manually here...
         private const string winningText =
 @"The corrupted brother, consumed, would be a threat no more
-with the remains of its Royal Jelly reverted back to a natural,
+with the remains of its royal jelly reverted back to a natural,
 insentient state.
 Gluttony, whilst not dead, was restrained by Wisdom to make
 both stronger.
-And the new Royal Jelly left the Tomb of the Jelly King to seek
+And the new royal jelly left the Tomb of the Jelly King to seek
 the brethren of its two strong cores.";
         private SpriteFont font;
 
