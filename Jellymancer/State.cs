@@ -99,9 +99,20 @@ namespace Jellymancer
 
             // Get new mouse state
             var newMouseState = Mouse.GetState();
-            mousePress[LEFT_BUTTON] = (oldMouseState.LeftButton == ButtonState.Released) && (newMouseState.LeftButton == ButtonState.Pressed);
-            mousePress[RIGHT_BUTTON] = (oldMouseState.RightButton == ButtonState.Released) && (newMouseState.RightButton == ButtonState.Pressed);
-            mousePress[MIDDLE_BUTTON] = (oldMouseState.MiddleButton == ButtonState.Released) && (newMouseState.MiddleButton == ButtonState.Pressed);
+
+            // If in viewport, click
+            if (spriteBatch.GraphicsDevice.Viewport.Bounds.Contains(newMouseState.X, newMouseState.Y))
+            {
+                mousePress[LEFT_BUTTON] = (oldMouseState.LeftButton == ButtonState.Released) && (newMouseState.LeftButton == ButtonState.Pressed);
+                mousePress[RIGHT_BUTTON] = (oldMouseState.RightButton == ButtonState.Released) && (newMouseState.RightButton == ButtonState.Pressed);
+                mousePress[MIDDLE_BUTTON] = (oldMouseState.MiddleButton == ButtonState.Released) && (newMouseState.MiddleButton == ButtonState.Pressed);
+            }
+            else
+            {
+                mousePress[LEFT_BUTTON] = false;
+                mousePress[RIGHT_BUTTON] = false;
+                mousePress[MIDDLE_BUTTON] = false;
+            }
 
             oldKeyState = newKeyState;
             oldMouseState = newMouseState;
