@@ -23,7 +23,7 @@
 		- [x] Pathfinding 😒
 - [ ] **Dungeon building 102**
 	- [x] Basic jelly enemy
-	- [ ] Bigger jelly enemy as win condition
+	- [x] Bigger jelly enemy as win condition
 	- [ ] Display text on winning
 - [ ] **World building**
 	- [ ] Macro tile-chunk allocation

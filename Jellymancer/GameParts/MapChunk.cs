@@ -333,11 +333,11 @@ namespace Jellymancer.GameParts
             // Add THE GLUTTON (who won't be that much tougher really)
             {
                 var ix = 0;
-                var iy = 5;
+                var iy = 0;
                 while (!map[ix, iy].walkable)
                 {
                     ix = random.Next(0, Width);
-                    //iy = random.Next(Height * 5 / 6, Height);
+                    iy = random.Next(Height * 5 / 6, Height);
                 }
                 AddActor(new GluttonEnemy(monsterSprites["GluttonCore"],
                                           monsterSprites["GluttonBody"],

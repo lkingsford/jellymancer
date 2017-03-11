@@ -35,6 +35,11 @@ namespace Jellymancer
         /// </summary>
         public PlayerCharacter pc;
 
+        /// <summary>
+        /// It amused me
+        /// </summary>
+        public GluttonEnemy badHombre;
+
         public Random rng = new Random();
 
         public bool gameover = false;
@@ -56,6 +61,9 @@ namespace Jellymancer
             healthui[3] = content.Load<Texture2D>("Game/UI/Health3");
             healthui[2] = content.Load<Texture2D>("Game/UI/Health2");
             healthui[1] = content.Load<Texture2D>("Game/UI/Health1");
+
+            // Find victory dude
+            badHombre = (GluttonEnemy)currentMap.Actors.First(i => i.GetType() == typeof(GluttonEnemy));
         }
 
         Texture2D[] healthui;
@@ -341,9 +349,15 @@ namespace Jellymancer
                     i.Act();
                 }
 
+                // Check losing and victory condition
                 if (pc.dead)
                 {
                     GameOver();
+                }
+
+                if (badHombre.dead)
+                {
+                    Victory();
                 }
 
                 currentMap.KillDeadActors();
@@ -358,6 +372,15 @@ namespace Jellymancer
             gameOverState.LoadContent();
             gameOverState.SpriteBatch = SpriteBatch;
             states.Add(gameOverState);
+        }
+
+        private void Victory()
+        {
+            states.Remove(this);
+            var victoryState = new VictoryState(content);
+            victoryState.LoadContent();
+            victoryState.SpriteBatch = SpriteBatch;
+            states.Add(victoryState);
         }
     }
 }
