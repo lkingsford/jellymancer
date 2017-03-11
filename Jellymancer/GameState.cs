@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 
 namespace Jellymancer
 {
@@ -41,6 +42,7 @@ namespace Jellymancer
         /// </summary>
         public GluttonEnemy badHombre;
 
+        public bool musicOn = true;
 
         public Random rng = new Random();
 
@@ -78,9 +80,23 @@ namespace Jellymancer
             gluttonTalked[1] = false;
             gluttonTalked[2] = false;
             gluttonTalked[3] = false;
+
+            // Add BGM
+            tunes = new List<Song>();
+            for (var i = 0; i <= 5; ++i)
+            {
+                tunes.Add(content.Load<Song>($"Game/BGM/{i}"));
+            }
+            // Randomise
+            tunes = tunes.OrderBy(i => rng.Next()).ToList(); 
+            StartTunes();
+                    
         }
 
         Texture2D[] healthui;
+
+        List<Song> tunes;
+        int currentTune = 0;
 
         // Tile dimesons in pixels
         const int TILE_WIDTH = 32;
@@ -187,6 +203,24 @@ namespace Jellymancer
             base.Update(gametime);
 
             bool acted = false; 
+            
+            if (keyPress.Contains(Keys.F1))
+            {
+                musicOn = !musicOn;
+                if (musicOn)
+                {
+                    StartTunes();
+                }
+                else
+                {
+                    StopTunes();
+                }
+            }
+
+            if (keyPress.Contains(Keys.F2))
+            {
+                NextTune();
+            }
 
             if (mousePress[LEFT_BUTTON])
             {
@@ -405,6 +439,24 @@ namespace Jellymancer
                 currentMap.KillDeadActors();
             }
 
+        }
+
+        private void StopTunes()
+        {
+            MediaPlayer.Stop();
+        }
+
+        private void StartTunes()
+        {
+            if (currentTune >= tunes.Count) { currentTune = 0; }
+            MediaPlayer.Play(tunes[currentTune]);
+        }
+
+        private void NextTune()
+        {
+            currentTune += 1;
+            if (currentTune >= tunes.Count) { currentTune = 0; }
+            MediaPlayer.Play(tunes[currentTune]);
         }
 
         SoundEffect[] gluttonTalks;

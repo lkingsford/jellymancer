@@ -415,3 +415,39 @@
 /processorParam:Quality=Best
 /build:Game/Sounds/Glutton4.ogg
 
+#begin Game\BGM\1.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Game\BGM\1.ogg
+
+#begin Game\BGM\2.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Game\BGM\2.ogg
+
+#begin Game\BGM\3.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Game\BGM\3.ogg
+
+#begin Game\BGM\4.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Game\BGM\4.ogg
+
+#begin Game\BGM\5.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Game\BGM\5.ogg
+
+#begin Game\BGM\0.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Game\BGM\0.ogg
+
