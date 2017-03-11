@@ -361,3 +361,9 @@
 /processorParam:TextureFormat=Color
 /build:Victory/Victory.png
 
+#begin Victory\Story.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Victory\Story.spritefont
+

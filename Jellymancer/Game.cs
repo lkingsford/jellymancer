@@ -28,6 +28,7 @@ namespace Jellymancer
 
             mainMenu = new MainMenu(Content);
             states.Add(mainMenu);
+            states.Add(new VictoryState(Content));
         }
 
         /// <summary>

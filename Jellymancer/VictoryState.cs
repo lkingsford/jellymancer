@@ -18,9 +18,21 @@ namespace Jellymancer
 
         Texture2D victoryTitle;
 
+        // We're word wrapping manually here...
+        private const string winningText =
+@"The corrupted brother, consumed, would be a threat no more
+with the remains of its Royal Jelly reverted back to a natural,
+insentient state.
+Gluttony, whilst not dead, was restrained by Wisdom to make
+both stronger.
+And the new Royal Jelly left the Tomb of the Jelly King to seek
+the brethren of its two strong cores.";
+        private SpriteFont font;
+
         public override void LoadContent()
         {
             victoryTitle = content.Load<Texture2D>("Victory/Victory");
+            font = content.Load<SpriteFont>("Victory/Story");
             base.LoadContent();
         }
 
@@ -31,6 +43,7 @@ namespace Jellymancer
             spriteBatch.Draw(victoryTitle,
                              new Vector2((1280 - victoryTitle.Width) / 2, 50),
                              Color.White);
+            spriteBatch.DrawString(font, winningText, new Vector2(230, 400), Color.Black);
             spriteBatch.End();
             base.Update(gametime);
         }
