@@ -25,9 +25,12 @@ namespace Jellymancer.GameParts
             base.Act();
 
             // Find the PC
-            var pc = currentMap.Actors.First(i => i.GetType() == typeof(PlayerCharacter));
+            var pc = currentMap.Actors.FirstOrDefault(i => i.GetType() == typeof(PlayerCharacter));
 
-            MoveTowards(pc.x, pc.y);
+            if (pc != null)
+            {
+                MoveTowards(pc.x, pc.y);
+            }
         }
 
         public override void Choke()
