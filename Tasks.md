@@ -44,3 +44,9 @@
 The further down on this list, the less sure I am.
 
 It's also very likely to change during dev.
+
+
+Bugs List:
+1 - Final boss isn't eating
+2 - Final boss talks every step
+3 - Get stuck in first room
