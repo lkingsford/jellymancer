@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jellymancer", "Jellymancer\Jellymancer.csproj", "{539A8230-B137-4FED-BA98-65261301D47E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C2350573-A9BC-4C99-A1C3-72353CC27CEA}"
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
@@ -12,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 		Tasks.md = Tasks.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jellymancer", "JellymancerGL\Jellymancer.csproj", "{8FA44BC3-6918-4006-ACA8-0C033B5AFA77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,16 +23,16 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{539A8230-B137-4FED-BA98-65261301D47E}.Debug - Any CPU|Any CPU.ActiveCfg = Debug|x86
-		{539A8230-B137-4FED-BA98-65261301D47E}.Debug - Any CPU|Any CPU.Build.0 = Debug|x86
-		{539A8230-B137-4FED-BA98-65261301D47E}.Debug - Any CPU|x86.ActiveCfg = Release|x86
-		{539A8230-B137-4FED-BA98-65261301D47E}.Debug - Any CPU|x86.Build.0 = Release|x86
-		{539A8230-B137-4FED-BA98-65261301D47E}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{539A8230-B137-4FED-BA98-65261301D47E}.Debug|x86.ActiveCfg = Debug|x86
-		{539A8230-B137-4FED-BA98-65261301D47E}.Debug|x86.Build.0 = Debug|x86
-		{539A8230-B137-4FED-BA98-65261301D47E}.Release|Any CPU.ActiveCfg = Release|x86
-		{539A8230-B137-4FED-BA98-65261301D47E}.Release|x86.ActiveCfg = Release|x86
-		{539A8230-B137-4FED-BA98-65261301D47E}.Release|x86.Build.0 = Release|x86
+		{8FA44BC3-6918-4006-ACA8-0C033B5AFA77}.Debug - Any CPU|Any CPU.ActiveCfg = Release|x86
+		{8FA44BC3-6918-4006-ACA8-0C033B5AFA77}.Debug - Any CPU|Any CPU.Build.0 = Release|x86
+		{8FA44BC3-6918-4006-ACA8-0C033B5AFA77}.Debug - Any CPU|x86.ActiveCfg = Debug|x86
+		{8FA44BC3-6918-4006-ACA8-0C033B5AFA77}.Debug - Any CPU|x86.Build.0 = Debug|x86
+		{8FA44BC3-6918-4006-ACA8-0C033B5AFA77}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{8FA44BC3-6918-4006-ACA8-0C033B5AFA77}.Debug|x86.ActiveCfg = Debug|x86
+		{8FA44BC3-6918-4006-ACA8-0C033B5AFA77}.Debug|x86.Build.0 = Debug|x86
+		{8FA44BC3-6918-4006-ACA8-0C033B5AFA77}.Release|Any CPU.ActiveCfg = Release|x86
+		{8FA44BC3-6918-4006-ACA8-0C033B5AFA77}.Release|x86.ActiveCfg = Release|x86
+		{8FA44BC3-6918-4006-ACA8-0C033B5AFA77}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

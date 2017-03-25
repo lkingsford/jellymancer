@@ -7,7 +7,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{539A8230-B137-4FED-BA98-65261301D47E}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Jellymancer</RootNamespace>
     <AssemblyName>Jellymancer</AssemblyName>
@@ -52,29 +52,12 @@
   <PropertyGroup>
     <ApplicationIcon>Ico.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Game.cs" />
-    <Compile Include="GameOverState.cs" />
-    <Compile Include="GameParts\Actor.cs" />
-    <Compile Include="GameParts\BasicEnemy.cs" />
-    <Compile Include="GameParts\Critter.cs" />
-    <Compile Include="GameParts\Food.cs" />
-    <Compile Include="GameParts\GlobalMap.cs" />
-    <Compile Include="GameParts\GluttonEnemy.cs" />
-    <Compile Include="GameParts\JellyEnemy.cs" />
-    <Compile Include="GameParts\MapChunk.cs" />
-    <Compile Include="GameParts\PlayerCharacter.cs" />
-    <Compile Include="GameParts\JellyBit.cs" />
-    <Compile Include="GameState.cs" />
-    <Compile Include="GameParts\MapTile.cs" />
-    <Compile Include="Helpers.cs" />
-    <Compile Include="HowToPlayState.cs" />
-    <Compile Include="IntroState.cs" />
-    <Compile Include="MainMenu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="State.cs" />
-    <Compile Include="VictoryState.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="AStarPathFinder">
@@ -112,6 +95,12 @@
     <None Include="README.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JellymancerGame\JellymancerGame.csproj">
+      <Project>{d83ec63f-c0f1-4a0f-bb71-8fdc57b45470}</Project>
+      <Name>JellymancerGame</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
