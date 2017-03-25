@@ -42,10 +42,6 @@ namespace Jellymancer
 
         public const string AUTHOR_BLOCK =
 @"
-This game was produced for the 
-Seven Day Roguelike Challenge
-between 10pm 4 March 2017 and
-3:30pm 11 March 2017 by
 Lachlan Kingsford.
 @thelochok
 www.nerdygentleman.com
