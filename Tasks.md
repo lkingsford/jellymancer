@@ -48,5 +48,5 @@ It's also very likely to change during dev.
 
 Bugs List:
 1 - Final boss isn't eating
-2 - Final boss talks every step
+2 - Final boss talks every step [FIXED]
 3 - Get stuck in first room
