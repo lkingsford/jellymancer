@@ -1,6 +1,4 @@
-﻿using DeenGames.Utils;
-using DeenGames.Utils.AStarPathFinder;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,10 +54,8 @@ namespace Jellymancer.GameParts
             {
                 try
                 {
-                    var closestFoodPath = new PathFinderFast(currentMap.pathGrid).
-                                          FindPath(new Point(x, y), new Point(closestFood.x, closestFood.y));
-                    var pcPath = new PathFinderFast(currentMap.pathGrid).
-                                          FindPath(new Point(x, y), new Point(pc.x, pc.y));
+                    var closestFoodPath = Pathfinding.Pathfinder.FindPath(currentMap.pathGrid, new Tuple<int,int>(x, y), new Tuple<int, int>(closestFood.x, closestFood.y));
+                    var pcPath = Pathfinding.Pathfinder.FindPath(currentMap.pathGrid, new Tuple<int, int>(x, y), new Tuple<int, int>(pc.x, pc.y));
                     if (closestFoodPath.Count < pcPath.Count)
                     {
                         MoveTowards(closestFood.x, closestFood.y);

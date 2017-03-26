@@ -31,11 +31,11 @@ namespace Jellymancer.GameParts
         {
             try
             {
-                var path = new DeenGames.Utils.AStarPathFinder.PathFinderFast(currentMap.pathGrid).FindPath(new DeenGames.Utils.Point(this.x, this.y), new DeenGames.Utils.Point(x, y));
+                var path = Pathfinding.Pathfinder.FindPath(currentMap.pathGrid, new Tuple<int, int>(this.x, this.y), new Tuple<int, int>(x, y));
                 if (path != null && path.Count > 2)
                 {
                     var pathPos = (path[path.Count - 2]);
-                    base.MoveTowards(path[path.Count - 2].X, path[path.Count - 2].Y);
+                    base.MoveTowards(path[path.Count - 2].Item1, path[path.Count - 2].Item2);
                 }
                 else
                 {

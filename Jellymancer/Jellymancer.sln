@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jellymancer", "Jellymancer.csproj", "{CE11B2CD-7DB7-422A-8BA5-863E33DF72DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AStarPathFinder", "AStarPathFinder\AStarPathFinder.csproj", "{8B37BD1F-D006-4A4A-A582-03E818B11101}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pathfinding", "..\Pathfinding\Pathfinding.csproj", "{6700F8F5-C128-42C9-B7C1-19D5600FD926}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{CE11B2CD-7DB7-422A-8BA5-863E33DF72DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE11B2CD-7DB7-422A-8BA5-863E33DF72DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE11B2CD-7DB7-422A-8BA5-863E33DF72DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B37BD1F-D006-4A4A-A582-03E818B11101}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B37BD1F-D006-4A4A-A582-03E818B11101}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B37BD1F-D006-4A4A-A582-03E818B11101}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B37BD1F-D006-4A4A-A582-03E818B11101}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6700F8F5-C128-42C9-B7C1-19D5600FD926}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6700F8F5-C128-42C9-B7C1-19D5600FD926}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6700F8F5-C128-42C9-B7C1-19D5600FD926}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6700F8F5-C128-42C9-B7C1-19D5600FD926}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

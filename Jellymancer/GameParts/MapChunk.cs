@@ -224,8 +224,53 @@ namespace Jellymancer.GameParts
 
             var startRoom = generatedMap.Rooms.OrderBy(i => i.Row).First();
 
-            startX = (startRoom.Column + startRoom.Right) / 2;
-            startY = (startRoom.Row + startRoom.Bottom) / 2;
+
+            UpdatePathGrid();
+
+            // For checking if the path between start and end is clear - fixes bug
+            List<Tuple<int, int>> path = null;
+            int endX;
+            int endY;
+            do
+            {
+
+                // Set player start
+                {
+                    var ix = 0;
+                    var iy = 0;
+                    while (!map[ix, iy].walkable)
+                    {
+                        ix = random.Next(0, Width);
+                        iy = random.Next(10);
+                    }
+                    startX = ix;
+                    startY = iy;
+                }
+
+                // Place THE GLUTTON (who won't be that much tougher really)
+                {
+                    var ix = 0;
+                    var iy = 0;
+                    while (!map[ix, iy].walkable)
+                    {
+                        ix = random.Next(0, Width);
+                        iy = random.Next(Height * 5 / 6, Height);
+                    }
+                    endX = ix;
+                    endY = iy;
+                }
+                var pa = new Tuple<int, int>(startX, startY);
+                var pb = new Tuple<int, int>(endX, endY);
+                path = Pathfinding.Pathfinder.FindPath(pathGrid, pa, pb);
+            } while (path == null || ((path != null) && ( path.Count < 2)));
+            // Add the glutton
+            AddActor(new GluttonEnemy(monsterSprites["GluttonCore"],
+                                          monsterSprites["GluttonBody"],
+                                          endX,
+                                          endY,
+                                          3,
+                                          random,
+                                          this));
 
             // Add Food
             for (var i = 0; i < (Width * Height) / 50; ++i)
@@ -329,45 +374,20 @@ namespace Jellymancer.GameParts
                 Texture2D sprite = monsterSprites[$"Jelly{random.Next(1, 5)}"];
                 AddActor(new JellyEnemy(sprite, sprite, ix, iy, random.Next(3, 6), random, this));
             }
-
-            // Add THE GLUTTON (who won't be that much tougher really)
-            {
-                var ix = 0;
-                var iy = 0;
-                while (!map[ix, iy].walkable)
-                {
-                    ix = random.Next(0, Width);
-                    iy = random.Next(Height * 5 / 6, Height);
-                }
-                AddActor(new GluttonEnemy(monsterSprites["GluttonCore"],
-                                          monsterSprites["GluttonBody"],
-                                          ix,
-                                          iy,
-                                          3,
-                                          random,
-                                          this));
-            }
-
-            UpdatePathGrid();
         }
 
         public int startX, startY;
 
-        public byte[,] pathGrid;
+        public bool[,] pathGrid;
         public void UpdatePathGrid()
         {
-            int width = DeenGames.Utils.AStarPathFinder.PathFinderHelper.RoundToNearestPowerOfTwo(Width);
-            int height = DeenGames.Utils.AStarPathFinder.PathFinderHelper.RoundToNearestPowerOfTwo(Height);
-
-            pathGrid = new byte[width, height];
+            pathGrid = new bool[Width, Height];
 
             for (var ix = 1; ix < (generatedMap.Width - 2); ++ix)
             {
                 for (var iy = 1; iy < (generatedMap.Height - 2); ++iy)
                 {
-                    pathGrid[ix, iy] = (byte)(map[ix, iy].walkable ?
-                        DeenGames.Utils.AStarPathFinder.PathFinderHelper.EMPTY_TILE :
-                        DeenGames.Utils.AStarPathFinder.PathFinderHelper.BLOCKED_TILE);
+                    pathGrid[ix, iy] = map[ix, iy].walkable;
                 }
             }
         }
