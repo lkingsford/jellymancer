@@ -66,7 +66,8 @@ namespace Pathfinding
                 //        current := the node in openSet having the lowest fScore[] value
                 var current = openSet.Aggregate((curMin, i) => (fscore[i.Item1, i.Item2] < fscore[curMin.Item1, curMin.Item2]) ? i : curMin);
                 //        if current = goal
-                if (current.Equals(end))
+                // Special case for one off if unwalkable (as most common opt needed if fail)
+                if (walkableMap[end.Item1, end.Item2] && current.Equals(end))
                 {
                     //            return reconstruct_path(cameFrom, current)
                     //    total_path := [current]
@@ -82,9 +83,13 @@ namespace Pathfinding
                     }
                     return totalPath;
                 }
+                else if (!walkableMap[end.Item1, end.Item2] && nearestDistance <= 2)
+                {
+                    break;
+                }
 
-                //        openSet.Remove(current)
-                openSet.Remove(current);
+                    //        openSet.Remove(current)
+                    openSet.Remove(current);
                 //        closedSet.Add(current)
                 closedSet.Add(current);
                 //        for each neighbor of current

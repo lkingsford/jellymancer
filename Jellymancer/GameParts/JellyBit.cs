@@ -166,7 +166,7 @@ namespace Jellymancer.GameParts
             {
                 if (depth == 0)
                 {
-                    var path = Pathfinding.Pathfinder.FindPath(currentMap.pathGrid, new Tuple<int, int>(this.x, this.y), new Tuple<int, int>(x, y));
+                    var path = Pathfinding.Pathfinder.FindPath(currentMap.pathGrid, new Tuple<int, int>(this.x, this.y), new Tuple<int, int>(x, y), currentMap.pathGrid[x, y] ? 30 : 15);
                     if (path != null && path.Count > 2)
                     {
                         var pathPos = (path[1]);
