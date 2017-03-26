@@ -8,7 +8,7 @@ namespace Pathfinding
 {
     public static class Pathfinder
     {
-        public static List<Tuple<int, int>> FindPath(bool[,] walkableMap, Tuple<int,int> start, Tuple<int, int> end, int limit = 20)
+        public static List<Tuple<int, int>> FindPath(bool[,] walkableMap, Tuple<int, int> start, Tuple<int, int> end, int limit = 20, bool failureAllowed = true)
         {
             // Ported from pseudocode on https://en.wikipedia.org/wiki/A*_search_algorithm
             // Readily copy pasted in
@@ -57,6 +57,9 @@ namespace Pathfinding
             //    fScore[start] := heuristic_cost_estimate(start, goal)
             fscore[start.Item1, start.Item2] = Math.Abs(start.Item1 - end.Item1) + Math.Abs(start.Item2 - end.Item2);
 
+            Tuple<int, int> nearestPoint = null;
+            var nearestDistance = int.MaxValue;
+
                 //    while openSet is not empty
             while (openSet.Count > 0)
             {
@@ -101,7 +104,7 @@ namespace Pathfinding
                                               (i.Item2 >= 0) &&
                                               (i.Item2 < height) &&
                                               (walkableMap[i.Item1, i.Item2]) &&
-                                              (Math.Abs(start.Item1 - end.Item1) + Math.Abs(start.Item2 - end.Item2) <= limit)
+                                              (Math.Abs(i.Item1 - end.Item1) + Math.Abs(i.Item2 - end.Item2) <= limit)
                                               ).ToList();
                 foreach (var neighbour in neighbours)
                 {
@@ -133,11 +136,35 @@ namespace Pathfinding
                     //            gScore[neighbor] := tentative_gScore
                     gscore[neighbour.Item1, neighbour.Item2] = tentativeGScore;
                     //            fScore[neighbor] := gScore[neighbor] + heuristic_cost_estimate(neighbor, goal)
-                    fscore[neighbour.Item1, neighbour.Item2] = Math.Abs(neighbour.Item1 - end.Item1) + Math.Abs(neighbour.Item2 - end.Item2);
+                    var estimatedDistance = Math.Abs(neighbour.Item1 - end.Item1) + Math.Abs(neighbour.Item2 - end.Item2);
+                    fscore[neighbour.Item1, neighbour.Item2] = estimatedDistance;
+                    if (estimatedDistance < nearestDistance)
+                    {
+                        nearestPoint = neighbour;
+                    }
                 }
             }
 
-            return null;
+            if (!failureAllowed)
+            {
+                // Go close as possible
+                var totalPath = new List<Tuple<int, int>>();
+                var current = nearestPoint;
+                totalPath.Add(current);
+                //    while current in cameFrom.Keys:
+                while (cameFrom.Any(i => i.Key.Equals(current)))
+                {
+                    //        current := cameFrom[current]
+                    current = cameFrom[current];
+                    //        total_path.append(current)
+                    totalPath.Insert(0, current);
+                }
+                return totalPath;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

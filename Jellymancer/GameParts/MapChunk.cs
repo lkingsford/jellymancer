@@ -261,7 +261,7 @@ namespace Jellymancer.GameParts
                 }
                 var pa = new Tuple<int, int>(startX, startY);
                 var pb = new Tuple<int, int>(endX, endY);
-                path = Pathfinding.Pathfinder.FindPath(pathGrid, pa, pb, int.MaxValue);
+                path = Pathfinding.Pathfinder.FindPath(pathGrid, pa, pb, int.MaxValue, true);
             } while (path == null || ((path != null) && ( path.Count < 2)));
             // Add the glutton
             AddActor(new GluttonEnemy(monsterSprites["GluttonCore"],
