@@ -8,7 +8,7 @@ namespace Pathfinding
 {
     public static class Pathfinder
     {
-        public static List<Tuple<int, int>> FindPath(bool[,] walkableMap, Tuple<int,int> start, Tuple<int, int> end)
+        public static List<Tuple<int, int>> FindPath(bool[,] walkableMap, Tuple<int,int> start, Tuple<int, int> end, int limit = 20)
         {
             // Ported from pseudocode on https://en.wikipedia.org/wiki/A*_search_algorithm
             // Readily copy pasted in
@@ -100,7 +100,8 @@ namespace Pathfinding
                                               (i.Item1 < width) &&
                                               (i.Item2 >= 0) &&
                                               (i.Item2 < height) &&
-                                              (walkableMap[i.Item1, i.Item2])
+                                              (walkableMap[i.Item1, i.Item2]) &&
+                                              (Math.Abs(start.Item1 - end.Item1) + Math.Abs(start.Item2 - end.Item2) <= limit)
                                               ).ToList();
                 foreach (var neighbour in neighbours)
                 {

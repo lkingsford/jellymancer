@@ -164,13 +164,13 @@ namespace Jellymancer.GameParts
             // Use pathfinding to move towards mouse click
             try
             {
-                if (depth != 0)
+                if (depth == 0)
                 {
                     var path = Pathfinding.Pathfinder.FindPath(currentMap.pathGrid, new Tuple<int, int>(this.x, this.y), new Tuple<int, int>(x, y));
                     if (path != null && path.Count > 2)
                     {
-                        var pathPos = (path[path.Count - 2]);
-                        base.MoveTowards(path[path.Count - 2].Item1, path[path.Count - 2].Item2);
+                        var pathPos = (path[1]);
+                        base.MoveTowards(pathPos.Item1, pathPos.Item2);
                     }
                     else
                     {
