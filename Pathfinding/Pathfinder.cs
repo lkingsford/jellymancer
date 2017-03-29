@@ -17,7 +17,7 @@ namespace Pathfinding
 
             //    // The set of nodes already evaluated.
             //    closedSet := {}
-            var closedSet = new List<Tuple<int, int>>();
+            var closedSet = new bool[width, height];
             //    // The set of currently discovered nodes that are not evaluated yet.
             //    // Initially, only the start node is known.
             //    openSet := {start}
@@ -91,7 +91,7 @@ namespace Pathfinding
                     //        openSet.Remove(current)
                     openSet.Remove(current);
                 //        closedSet.Add(current)
-                closedSet.Add(current);
+                closedSet[current.Item1, current.Item2] = true;
                 //        for each neighbor of current
                 var neighbours = new List<Tuple<int, int>>();
                 neighbours.Add(new Tuple<int, int>(current.Item1 - 1, current.Item2 - 1));
@@ -114,7 +114,7 @@ namespace Pathfinding
                 foreach (var neighbour in neighbours)
                 {
                     //            if neighbor in closedSet
-                    if (closedSet.Any(i => i.Equals(neighbour)))
+                    if (closedSet[neighbour.Item1, neighbour.Item2])
                     {
                     //                continue		// Ignore the neighbor which is already evaluated.
                         continue;
