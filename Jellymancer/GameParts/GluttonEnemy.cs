@@ -62,7 +62,7 @@ namespace Jellymancer.GameParts
                 {
                     var closestFoodPath = Pathfinding.Pathfinder.FindPath(currentMap.pathGrid, new Tuple<int,int>(x, y), new Tuple<int, int>(closestFood.x, closestFood.y));
                     var pcPath = Pathfinding.Pathfinder.FindPath(currentMap.pathGrid, new Tuple<int, int>(x, y), new Tuple<int, int>(pc.x, pc.y));
-                    if (pcPath != null && (closestFoodPath.Count < pcPath.Count))
+                    if (closestFoodPath != null && pcPath != null && (closestFoodPath.Count < pcPath.Count))
                     {
                         MoveTowards(closestFood.x, closestFood.y);
                     }
