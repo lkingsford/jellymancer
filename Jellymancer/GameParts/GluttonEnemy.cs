@@ -43,7 +43,13 @@ namespace Jellymancer.GameParts
             characterParts.RemoveAll(i => i.dead);
 
             // Find the PC
-            var pc = currentMap.Actors.First(i => i.GetType() == typeof(PlayerCharacter));
+            var pc = currentMap.Actors.FirstOrDefault(i => i.GetType() == typeof(PlayerCharacter));
+
+            // PC was killed - don't wanna crash on loss!
+            if (pc == null)
+            {
+                return;
+            }
 
             // Find nearest food
             var food = currentMap.Actors.Where(i => i.foodOnly);
