@@ -128,9 +128,11 @@ namespace Jellymancer.GameParts
         /// <summary>
         /// Kill all actors marked dead
         /// </summary>
-        public void KillDeadActors()
+        public List<Actor> KillDeadActors()
         {
+            var theDead = actors.Where(i => i.dead).ToList();
             actors.RemoveAll(i => i.dead);
+            return theDead;
         }
 
         public Karcero.Engine.Models.Map<Karcero.Engine.Models.Cell> generatedMap;
@@ -261,7 +263,7 @@ namespace Jellymancer.GameParts
                 }
                 var pa = new Tuple<int, int>(startX, startY);
                 var pb = new Tuple<int, int>(endX, endY);
-                path = Pathfinding.Pathfinder.FindPath(pathGrid, pa, pb, int.MaxValue, true);
+                path = Pathfinding.Pathfinder.FindPath(pathGrid, pa, pb, 1000, true);
             } while (path == null || ((path != null) && ( path.Count < 2)));
             // Add the glutton
             AddActor(new GluttonEnemy(monsterSprites["GluttonCore"],

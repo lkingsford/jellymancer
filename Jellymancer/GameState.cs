@@ -110,12 +110,16 @@ namespace Jellymancer
 
         double timeSince = 0.0f;
         const double ANIMATION_TIME = 0.3f;
+        const double SLOW_ANIMATION_TIME = 1.0f;
 
         int camera_x = 0;
         int camera_y = 0;
         int last_camera_x = 0;
         int last_camera_y = 0;
         private List<State> states;
+
+        // Dead actor list for animation
+        private List<Actor> deadActors;
 
         /// <summary>
         /// Draw game to the screen
@@ -153,9 +157,11 @@ namespace Jellymancer
             timeSince += gameTime.ElapsedGameTime.TotalSeconds;
 
             // Draw actors
+            var timeRatio = Math.Min(1, timeSince / ANIMATION_TIME);
+            var slowRatio = Math.Min(1, timeSince / SLOW_ANIMATION_TIME);
+
             foreach (var i in currentMap.Actors)
             {
-                var timeRatio = Math.Min(1, timeSince / ANIMATION_TIME);
                 double x = i.x * timeRatio + i.lastTurnX * (1.0 - timeRatio);
                 double y = i.y * timeRatio + i.lastTurnY * (1.0 - timeRatio);
                 if ((x > camera_x) && 
@@ -167,6 +173,21 @@ namespace Jellymancer
                                      new Vector2((int)((x - camera_x) * TILE_WIDTH + X_OFFSET),
                                                  (int)((y - camera_y) * TILE_HEIGHT + Y_OFFSET)),
                                      Color.White);
+                }
+            }
+
+            // Draw dead actor animation
+            if (deadActors != null)
+            {
+                foreach (var i in deadActors)
+                {
+                    spriteBatch.Draw(
+                        i.sprite,
+                        new Rectangle((int)((i.x - camera_x) * TILE_WIDTH + X_OFFSET),
+                                      (int)((i.y - camera_y) * TILE_HEIGHT + Y_OFFSET),
+                                      (int)((1.0 - slowRatio) * TILE_WIDTH),
+                                      (int)((1.0 - slowRatio) * TILE_HEIGHT)),
+                        Color.White);
                 }
             }
 
@@ -391,7 +412,7 @@ namespace Jellymancer
                 }
 
                 // Kill deads
-                currentMap.KillDeadActors();
+                deadActors = currentMap.KillDeadActors();
                 
                 // Move all the baddies that are kinda close
                 foreach(var i in currentMap.Actors.Where(i=>(Math.Abs(i.x - pc.x) < 20) && (Math.Abs(i.y - pc.y) < 20)))
