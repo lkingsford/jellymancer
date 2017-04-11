@@ -183,8 +183,8 @@ namespace Jellymancer
                 {
                     spriteBatch.Draw(
                         i.sprite,
-                        new Rectangle((int)((i.x - camera_x) * TILE_WIDTH + X_OFFSET),
-                                      (int)((i.y - camera_y) * TILE_HEIGHT + Y_OFFSET),
+                        new Rectangle((int)((i.x - camera_x + (slowRatio * 0.5)) * TILE_WIDTH + X_OFFSET),
+                                      (int)((i.y - camera_y + (slowRatio * 0.5)) * TILE_HEIGHT + Y_OFFSET),
                                       (int)((1.0 - slowRatio) * TILE_WIDTH),
                                       (int)((1.0 - slowRatio) * TILE_HEIGHT)),
                         Color.White);
