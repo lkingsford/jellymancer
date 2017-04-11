@@ -275,10 +275,12 @@ namespace Jellymancer
 
             // If any move made
             if (acted)
-            { 
+            {
                 // Do choking
                 //   To prevent changing in foreach
-                var actorsBeforeChoke = new List<Actor>(currentMap.Actors);
+                //   Also to prevent checking every stupid jelly everywhere
+                var actorsBeforeChoke = currentMap.Actors.Where(i => (Math.Abs(i.x - pc.x) < 30) && (Math.Abs(i.y - pc.y) < 30)).ToList();
+
                 foreach(var i in actorsBeforeChoke)
                 {
                     int neighboursOccupied = 0;
@@ -361,42 +363,47 @@ namespace Jellymancer
                         parts.Add(i);
                         int surroundedCount = 0;
 
+                        // Get list of open spaces around the outside
+                        var surroundingFloor = new List<Tuple<int, int>>();
                         foreach (var j in parts)
                         {
-                            bool surrounded = true;
-
                             for (var ix = j.x - 1; ix <= j.x + 1; ++ix)
                             {
                                 for (var iy = j.y - 1; iy <= j.y + 1; ++iy)
                                 {
-                                    var monsterOnTile = currentMap.Actors.FirstOrDefault(k => (k.x == ix) && (k.y == iy));
-                                    if (monsterOnTile == null || (monsterOnTile != null && monsterOnTile.foodOnly))
+                                    // If not part of self, and open
+                                    if (!(parts.Any(k => (k.x == ix && k.y == iy))) &&
+                                        currentMap.map[ix, iy].walkable)
                                     {
-                                        if (currentMap.map[ix, iy].walkable)
-                                        {
-                                            surrounded = false;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (!monsterOnTile.parent?.characterParts.Contains(j) ?? false)
-                                        {
-                                            if (chokedBy.ContainsKey(monsterOnTile))
-                                            {
-                                                ++chokedBy[monsterOnTile];
-                                            }
-                                            else
-                                            {
-                                                chokedBy[monsterOnTile] = 1;
-                                            }
-                                        }
+                                        surroundingFloor.Add(new Tuple<int, int>(ix, iy));
                                     }
                                 }
                             }
-                            if (surrounded) { surroundedCount += 1; };
                         }
 
-                        if (surroundedCount == parts.Count)
+                        // Check if surrounds are occupied
+                        foreach (var j in surroundingFloor)
+                        {
+                            var monsterOnTile = currentMap.Actors.FirstOrDefault(k => (k.x == j.Item1) && (k.y == j.Item2));
+                            if (monsterOnTile != null && !monsterOnTile.foodOnly)
+                            {
+                                if (!monsterOnTile.parent?.characterParts.Contains(i) ?? false)
+                                {
+                                    if (chokedBy.ContainsKey(monsterOnTile))
+                                    {
+                                        ++chokedBy[monsterOnTile];
+                                    }
+                                    else
+                                    {
+                                        chokedBy[monsterOnTile] = 1;
+                                    }
+                                }
+                                surroundedCount += 1;
+                            }
+                        }
+
+                        // If all surrounds occupied, it's dead Jim
+                        if ((surroundedCount >= surroundingFloor.Count) || (surroundingFloor.Count == 0))
                         {
                             i.dead = true;
                             if (chokedBy.Count > 0)

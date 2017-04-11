@@ -17,7 +17,7 @@ namespace Jellymancer.GameParts
             {
                 Grow(x, y);
             }
-            ExplodeAndPullIn(MAX_DEPTH - 2);
+            ExplodeAndPullIn(MAX_DEPTH - 10);
         }
 
         public override void Act()
