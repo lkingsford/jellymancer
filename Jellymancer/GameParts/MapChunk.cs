@@ -270,7 +270,7 @@ namespace Jellymancer.GameParts
                                           monsterSprites["GluttonBody"],
                                           endX,
                                           endY,
-                                          3,
+                                          8,
                                           random,
                                           this));
 
